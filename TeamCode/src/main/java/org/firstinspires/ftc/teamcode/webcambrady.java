@@ -20,7 +20,7 @@ public class webcambrady extends LinearOpMode {
 private static final boolean USE_WEBCAM = true;
 private AprilTagProcessor aprilTag;
 private VisionPortal visionPortal;
-@Override
+//@Override
 public void runOpMode() {
 initAprilTag();
     telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
