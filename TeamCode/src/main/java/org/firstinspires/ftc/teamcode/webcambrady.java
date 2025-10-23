@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.annotation.SuppressLint;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -25,7 +27,8 @@ initAprilTag();
     telemetry.addData(">", "Touch START to start OpMode");
     telemetry.update();
     waitForStart();
-    if (opModeIsActive()); {
+    if (opModeIsActive())
+    {
         while (opModeIsActive()) {
 
         telemetryAprilTag();
@@ -56,6 +59,7 @@ if (USE_WEBCAM) {
 
 }
 }
+@SuppressLint("DefaultLocale")
 private void telemetryAprilTag() {
     List<AprilTagDetection> currentDetections = aprilTag.getDetections();
     telemetry.addData("# AprilTags Detected", currentDetections.size());
