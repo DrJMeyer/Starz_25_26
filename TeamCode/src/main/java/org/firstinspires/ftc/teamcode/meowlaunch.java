@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "Meowlaunch", group = "launch code")
-@Disabled
+//@Disabled
 public class meowlaunch extends LinearOpMode {
 private DcMotor meowtarRight= null;
 private DcMotor meowtarLeft= null;
