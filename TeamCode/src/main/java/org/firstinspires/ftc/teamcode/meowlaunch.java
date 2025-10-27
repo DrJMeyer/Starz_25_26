@@ -12,22 +12,22 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class meowlaunch extends LinearOpMode {
 private DcMotor meowtarRight= null;
 private DcMotor meowtarLeft= null;
-private Servo meowvroLanch =null;
+private Servo meowvroLaunch =null;
 @Override
 public void runOpMode() {
-    meowtarLeft = hardwareMap.get(DcMotor.class, "meowtarLeft");
-    meowtarRight = hardwareMap.get(DcMotor.class, "meowtarRight");
-    meowvroLanch = hardwareMap.get(Servo.class, "meowvroLaunch");
+    meowtarLeft = hardwareMap.get(DcMotor.class, "mL");
+    meowtarRight = hardwareMap.get(DcMotor.class, "mR");
+    meowvroLaunch = hardwareMap.get(Servo.class, "mLS ");
     meowtarLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     meowtarRight.setDirection(DcMotorSimple.Direction.FORWARD);
-    meowvroLanch.setDirection(Servo.Direction.FORWARD);
+    meowvroLaunch.setDirection(Servo.Direction.FORWARD);
 waitForStart();
 while (opModeIsActive()){
     if (gamepad1.a);
     {
         meowtarLeft.setPower(1);
         meowtarLeft.setPower(1);
-        meowvroLanch.setPosition(1);
+        meowvroLaunch.setPosition(1);
     }
     }
 }
