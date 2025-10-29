@@ -37,6 +37,9 @@ public class meowlaunch extends LinearOpMode {
                 meowtarLeft.setPower(0);
                 meowtarRight.setPower(0);
                 meowvroLaunch.setPosition(0);
+
+            telemetry.addData("Servo", meowvroLaunch.getPosition());
+            telemetry.update();
             }
         }
     }
