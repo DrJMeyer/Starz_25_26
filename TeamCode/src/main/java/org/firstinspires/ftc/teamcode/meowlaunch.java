@@ -21,16 +21,16 @@ public class meowlaunch extends LinearOpMode {
         meowtarLeft = hardwareMap.get(DcMotor.class, "mL");
         meowtarRight = hardwareMap.get(DcMotor.class, "mR");
         meowvroLaunch = hardwareMap.get(Servo.class, "mLS ");
-        meowtarLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        meowtarRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        meowtarLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        meowtarRight.setDirection(DcMotorSimple.Direction.REVERSE);
         meowvroLaunch.setDirection(Servo.Direction.FORWARD);
         waitForStart();
         while (opModeIsActive()) {
             if(gamepad1.a)
             {
-                meowtarLeft.setPower(1);
-                meowtarRight.setPower(1);
-                meowvroLaunch.setPosition(1);
+                meowtarLeft.setPower(.5);
+                meowtarRight.setPower(.5);
+                meowvroLaunch.setPosition(.5);
             }
             else
             {
