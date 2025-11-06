@@ -10,7 +10,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+import java.util.List;
 
 @TeleOp
 public class activation extends LinearOpMode {
@@ -20,11 +23,17 @@ public class activation extends LinearOpMode {
     private DcMotor backLeftDrive = null;
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
-    private Servo sup;
+    private Servo sLaunch;
+    private Servo sIntake;
     private NormalizedColorSensor colorSensor ;
     private static final boolean USE_WEBCAM = true;
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
+    private  DcMotor lLauncher;
+    private DcMotor  rLauncher;
+
+    private int[] motif;
+    public int IDnum;
 
 
 
@@ -42,9 +51,12 @@ public class activation extends LinearOpMode {
         backLeftDrive = hardwareMap.get(DcMotor.class, "bpd");
         frontRightDrive = hardwareMap.get(DcMotor.class, "fsd");
         backRightDrive = hardwareMap.get(DcMotor.class, "bsd");
-
+        //launch motors and
+        lLauncher = hardwareMap.get(DcMotor.class, "lL");
+        rLauncher = hardwareMap.get(DcMotor.class, "rL");
         // a servo. Which one?
-        sup = hardwareMap.get(Servo.class, "sup");
+        sLaunch = hardwareMap.get(Servo.class, "sup");
+        sIntake = hardwareMap.get(Servo.class, "dog");
 
         // color sensor (inside circular magazine)
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color");
@@ -62,7 +74,22 @@ public class activation extends LinearOpMode {
         backRightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // This is where we want to read the april tag and determine ball order.
-        ///// readAprilID()
+
+        IDnum = readAprilID();
+            if(IDnum == 21);
+        {
+            motif[]={0, 1, 1};
+        }
+        else if (IDnum == 22) ;
+            {
+                motif[]={1, 0, 1};
+            }
+        else if (IDnum == 23) ;{
+            motif[]={1, 1, 0};
+                }
+
+
+
         ///// create an array (like a list) of the order you need to match for balls
         // you will hold onto that array and reference it later in code which will decide which ball to shoot.
 
@@ -83,7 +110,19 @@ public class activation extends LinearOpMode {
             //// This may also need to include a method of rotating the magazine as each ball is gathered.
 
             // You will want a color sort and a launch code here. Likely connected functions activated by the press of a button
-            checkcolor();
+        launchCode();{
+
+                 int IDnum;
+                IDnum = readAprilID();
+           while(gamepad1.left_trigger)
+            lLauncher.setPower(.5);
+            rLauncher.setPower(.5);
+            sLaunch.setPosition(0);
+            if (IDnum==21)
+        }
+            public void checkcolor;() {
+
+            }
         }
     }
 
@@ -118,10 +157,22 @@ public class activation extends LinearOpMode {
                 .addData("Green", "%.3f", colors.green)
                 .addData("Blue", "%.3f", colors.blue);
     }
+    private int readAprilID() {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        telemetry.addData("# AprilTags Detected", currentDetections.size());
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null) {
+                telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
 
-    // private void intakeBall(){
-    //  code here
-    // }
+            }
+
+
+
+
+
+    return(detection."id");
+
+    }
 
 }
 
