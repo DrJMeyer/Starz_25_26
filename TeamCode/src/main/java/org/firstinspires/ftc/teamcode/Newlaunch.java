@@ -10,6 +10,9 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+
+//!!!!!--- Consider writing these functions directly inside Will's "activation" class. ---!!!!!!!!
+
 @TeleOp(name=Newlaunch, group = "first basis")
 private int apriltage
 public class Newlaunch {
