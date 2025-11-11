@@ -29,10 +29,15 @@ public class meowlaunch extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                meowtarLeft.setPower(.5);
-                meowtarRight.setPower(.5);
+                meowtarLeft.setPower(1.);
+                meowtarRight.setPower(1.);
                 meowvroFlap.setPosition(1);
-            } else {
+            }
+            else if (gamepad1.b) {
+                meowtarLeft.setPower(0.);
+                meowtarRight.setPower(0.);
+            }
+            else {
                 meowvroFlap.setPosition(0);
 
                 telemetry.addData("Servo", meowvroFlap.getPosition());
