@@ -47,6 +47,7 @@ public class serovpostest extends LinearOpMode {
 
         while (opModeIsActive()) {
             intakecode();
+            telemetry.update();
         }
 
 
@@ -57,6 +58,7 @@ public class serovpostest extends LinearOpMode {
         if (gamepad1.dpad_left) {
             intakePos = 0;
             sIntake.setPosition(0);
+            telemetry.addData("Servo", sIntake.getPosition());
         }
 
         else if (gamepad1.dpad_right) {
