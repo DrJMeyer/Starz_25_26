@@ -39,6 +39,7 @@ public class servoPosTest extends LinearOpMode {
         sIntake = hardwareMap.get(Servo.class, "dog");
 
         intakePos = 0;
+        sIntake.setPosition(0.);
 
         // Program hangs out until play button is pressed
         waitForStart();
@@ -54,15 +55,16 @@ public class servoPosTest extends LinearOpMode {
 
 
     private void intakecode() {
-        if (gamepad1.dpad_left) {
+        if (gamepad1.xWasReleased()) {
             intakePos = 0;
             sIntake.setPosition(0);
             telemetry.addData("Servo", sIntake.getPosition());
-        }
-
-        else if (gamepad1.dpad_right) {
-            intakePos = intakePos + 1. / 3.;
+            telemetry.addData("expected: ", intakePos);
+        } else if (gamepad1.yWasReleased()) {
+            intakePos = intakePos + 1. / 15.;
             sIntake.setPosition(intakePos);
+            telemetry.addData("Servo", sIntake.getPosition());
+            telemetry.addData("expected: ", intakePos);
         }
 
     }
