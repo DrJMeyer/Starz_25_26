@@ -4,14 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import com.qualcomm.robotcore.hardware.Servo;
-import android.annotation.SuppressLint;
-
-
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
-
-import java.util.List;
 
 // This is the latest update from 11/7
 
@@ -22,7 +14,7 @@ import java.util.List;
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 @TeleOp
-public class serovpostest extends LinearOpMode {
+public class servoPosTest extends LinearOpMode {
 
     // Initialize all of our variables here
 
@@ -33,6 +25,8 @@ public class serovpostest extends LinearOpMode {
     public double intakePos;
 
 
+
+
     // The main program begins here.
 
     /// // runOpMode() is called at the beginning of the LinearOpMode class we are running
@@ -40,9 +34,14 @@ public class serovpostest extends LinearOpMode {
     public void runOpMode() {
 
 
+
+
         sIntake = hardwareMap.get(Servo.class, "dog");
 
         intakePos = 0;
+
+        // Program hangs out until play button is pressed
+        waitForStart();
 
 
         while (opModeIsActive()) {
