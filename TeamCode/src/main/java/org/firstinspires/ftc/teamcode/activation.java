@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -37,7 +38,7 @@ public class activation extends LinearOpMode {
     private DcMotor backRightDrive = null;
     private Servo sLaunch;
     private Servo sIntake;
-    private DcMotor intake = null;
+    private DcMotor Intake = null;
     private DcMotor lLauncher;
     private DcMotor rLauncher;
     private Servo megabeam;
@@ -49,6 +50,8 @@ public class activation extends LinearOpMode {
 
     private int[] motif;
     public int IDnum;
+   public double intakePos;
+   public int num;
 
 
     // The main program begins here.
@@ -65,9 +68,10 @@ public class activation extends LinearOpMode {
         frontRightDrive = hardwareMap.get(DcMotor.class, "fsd");
         backRightDrive = hardwareMap.get(DcMotor.class, "bsd");
 
-        //launch motors and
+        //launch motors and intaek
         lLauncher = hardwareMap.get(DcMotor.class, "lL");
         rLauncher = hardwareMap.get(DcMotor.class, "rL");
+        Intake = hardwareMap.get(DcMotor.class, "inM" );
 
         // a servo. Which one?
         sLaunch = hardwareMap.get(Servo.class, "sup");
@@ -75,7 +79,9 @@ public class activation extends LinearOpMode {
 
         // color sensor (inside circular magazine)
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color");
-
+        //intakePos
+        intakePos=0;
+        num=0;
         // Still need:
         //// 1 webcam
 
@@ -85,6 +91,7 @@ public class activation extends LinearOpMode {
         backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        Intake.setDirection(DcMotor.Direction.FORWARD);
 
         // This is where we want to read the april tag and determine ball order.
 
@@ -126,9 +133,10 @@ public class activation extends LinearOpMode {
 
             // Intake code. Also activated by the press of a button and with a deactivation mechanism.
             //// This may also need to include a method of rotating the magazine as each ball is gathered.
-
+            intakecode();
             // You will want a color sort and a launch code here. Likely connected functions activated by the press of a button
             checkcolor();
+
             launchCode(motif);
 
 
@@ -147,6 +155,21 @@ public class activation extends LinearOpMode {
         visionPortal.close();
 
     }
+
+    private void intakecode() {
+    if (gamepad1.dpad_left) {
+            Intake.setPower(1);
+            sIntake.setPosition(0);
+
+        }
+    if (gamepad1.dpad_right){
+        intakePos= intakePos + 1./3.;
+        sIntake.setPosition(intakePos);
+    }
+
+    }
+
+
     private void moverobot() {
 
         // This function looks great. Should be ready to test
@@ -172,19 +195,19 @@ public class activation extends LinearOpMode {
         colorSensor.setGain(16);
         NormalizedRGBA colors = colorSensor.getNormalizedColors();
         telemetry.addLine()
-                .addData("Red", "%.3f", colors.red)
-                .addData("Green", "%.3f", colors.green)
                 .addData("Blue", "%.3f", colors.blue);
+        if ()
     }
 
     private void launchCode(int[] colorList)  {
         if (gamepad1.left_trigger == 1.0) {
-            lLauncher.setPower(.5);
-            rLauncher.setPower(.5);
+            lLauncher.setPower(.8);
+            rLauncher.setPower(.8);
             sLaunch.setPosition(0);
 
             // Loop through the motif list each time matching a ball in the magazine to the correct color.
             checkcolor();
+            if ()
 
         }
     }
