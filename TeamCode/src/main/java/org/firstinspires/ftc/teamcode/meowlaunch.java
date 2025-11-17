@@ -14,34 +14,32 @@ import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCapt
 public class meowlaunch extends LinearOpMode {
     private DcMotor meowtarRight = null;
     private DcMotor meowtarLeft = null;
-    private Servo meowvroFlap = null;
-
+    private Servo meowvroLaunch = null;
 
     @Override
     public void runOpMode() {
         meowtarLeft = hardwareMap.get(DcMotor.class, "mL");
         meowtarRight = hardwareMap.get(DcMotor.class, "mR");
-        meowvroFlap = hardwareMap.get(Servo.class, "mLS ");
+        meowvroLaunch = hardwareMap.get(Servo.class, "mLS ");
         meowtarLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         meowtarRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        meowvroFlap.setDirection(Servo.Direction.FORWARD);
+        meowvroLaunch.setDirection(Servo.Direction.FORWARD);
         waitForStart();
-
         while (opModeIsActive()) {
-            if (gamepad1.a) {
-                meowtarLeft.setPower(1.);
-                meowtarRight.setPower(1.);
-                meowvroFlap.setPosition(1);
+            if(gamepad1.a)
+            {
+                meowtarLeft.setPower(.5);
+                meowtarRight.setPower(.5);
+                meowvroLaunch.setPosition(.5);
             }
-            else if (gamepad1.b) {
-                meowtarLeft.setPower(0.);
-                meowtarRight.setPower(0.);
-            }
-            else {
-                meowvroFlap.setPosition(0);
+            else
+            {
+                meowtarLeft.setPower(0);
+                meowtarRight.setPower(0);
+                meowvroLaunch.setPosition(0);
 
-                telemetry.addData("Servo", meowvroFlap.getPosition());
-                telemetry.update();
+            telemetry.addData("Servo", meowvroLaunch.getPosition());
+            telemetry.update();
             }
         }
     }

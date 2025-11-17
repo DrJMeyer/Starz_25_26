@@ -85,6 +85,8 @@ public class activation extends LinearOpMode {
         // Still need:
         //// 1 webcam
 
+        initAprilTag();
+
 
         // Set direction of drive motors
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -137,10 +139,10 @@ public class activation extends LinearOpMode {
             // You will want a color sort and a launch code here. Likely connected functions activated by the press of a button
             checkcolor();
 
-            launchCode(motif);
+            launchCode();
 
 
-
+            telemetryAprilTag();
             telemetry.update();
 
             if (gamepad1.dpad_down) {
@@ -189,27 +191,53 @@ public class activation extends LinearOpMode {
         telemetry.update();
     }
 
-    private void checkcolor() {
+    private double checkcolor() {
         // Check in with Brady on this code. It will be merged with his.
         telemetry.addData("Gain", 16);
         colorSensor.setGain(16);
         NormalizedRGBA colors = colorSensor.getNormalizedColors();
         telemetry.addLine()
                 .addData("Blue", "%.3f", colors.blue);
-        if ()
+            return colors.blue;
     }
 
-    private void launchCode(int[] colorList)  {
-        if (gamepad1.left_trigger == 1.0) {
-            lLauncher.setPower(.8);
-            rLauncher.setPower(.8);
-            sLaunch.setPosition(0);
+    private void launchCode(){
 
-            // Loop through the motif list each time matching a ball in the magazine to the correct color.
-            checkcolor();
-            if ()
+        for(int i = 0; i <= 2; i ++){
+            if (checkcolor() >= .5 && motif[num] == 1){
+                // a filler position until we test to see what opens the flap best
+                sLaunch.setPosition(1);
+                // test and if needed add a wait function
+                intakePos= intakePos + 1./3.;
+                //change how much needs to be added if it does not revolve one slot
+                sIntake.setPosition(intakePos);
+                num ++;
+                i = 2;
+                    if (gamepad1.left_trigger == 1.0);{
+                        lLauncher.setPower(.8);
+                        rLauncher.setPower(.8);
+                        // put it back to orginal position
+                        sLaunch.setPosition(0);
+                    }
 
+
+            } else if (checkcolor() < .5 && motif[num] == 0) {
+                sLaunch.setPosition(1);
+                intakePos= intakePos + 1./3.;
+                sIntake.setPosition(intakePos);
+                num ++;
+                i = 2;
+                    if (gamepad1.left_trigger == 1.0);{
+                    lLauncher.setPower(.8);
+                    rLauncher.setPower(.8);
+                    sLaunch.setPosition(0);
+                    }
+            } else {
+                intakePos= intakePos + 1./3.;
+                sIntake.setPosition(intakePos);
+            }
         }
+        // Loop through the motif list each time matching a ball in the magazine to the correct color.
     }
 
 
