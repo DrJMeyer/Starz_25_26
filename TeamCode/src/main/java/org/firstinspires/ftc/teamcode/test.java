@@ -33,7 +33,7 @@ public class test extends LinearOpMode {
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
 
-    private int[] motif;
+    private int[] motif = {1, 2, 3,};
     public int IDnum;
     public double intakePos;
     public int num;
@@ -51,7 +51,6 @@ public class test extends LinearOpMode {
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color");
         intakePos = 0;
         num = 0;
-
         IDnum = 21;
 
         ///// create an array (like a list) of the order you need to match for balls
@@ -79,50 +78,57 @@ public class test extends LinearOpMode {
 
         // Robot will continually move through this list of code until stop button is pressed on driver hub
         while (opModeIsActive()) {
-        launchCode();
+            launchCode();
+
         }
     }
     private double checkcolor () {
     // Check in with Brady on this code. It will be merged with his.
     colorSensor.setGain(16);
     NormalizedRGBA colors = colorSensor.getNormalizedColors();
-    telemetry.addLine()
-            .addData("Blue", "%.3f", colors.blue);
+
     return colors.blue;
     }
 
 private void launchCode(){
 
     for(int i = 0; i <= 2; i ++){
-        if (checkcolor() >= .5 && motif[num] == 1){
+        double blue = checkcolor();
+
+        telemetry.addData("Blue", blue);
+        telemetry.addData("Motif Needed", motif[num]);
+        telemetry.addData("Num Index", num);
+        telemetry.addData("Pot", sLaunch.getPosition());
+        telemetry.addData("Pot2", sIntake.getPosition());
+        telemetry.update();
+
+        if (blue >= .5 && motif[num] == 1){
             // a filler position until we test to see what opens the flap best
-            sLaunch.setPosition(1);
+            sLaunch.setPosition(0);
             // test and if needed add a wait function
             intakePos= intakePos + 1./3.;
             //change how much needs to be added if it does not revolve one slot
             sIntake.setPosition(intakePos);
-            num ++;
+            num = num + 1;
             i = 2;
-            if (gamepad1.left_trigger == 1.0);{
-                lLauncher.setPower(.8);
-                rLauncher.setPower(.8);
-                // put it back to orginal position
-                sLaunch.setPosition(0);
-            }
 
 
-        } else if (checkcolor() < .5 && motif[num] == 0) {
+
+        }
+        sleep(1000);
+        if (blue < .5 && motif[num] == 0) {
+            lLauncher.setPower(1);
             sLaunch.setPosition(1);
             intakePos= intakePos + 1./3.;
             sIntake.setPosition(intakePos);
-            num ++;
+            num = num + 1;
             i = 2;
-            if (gamepad1.left_trigger == 1.0);{
-                lLauncher.setPower(.8);
-                rLauncher.setPower(.8);
-                sLaunch.setPosition(0);
-            }
-        } else {
+
+        }
+
+        else {
+            lLauncher.setPower(0);
+            rLauncher.setPower(0);
             intakePos= intakePos + 1./3.;
             sIntake.setPosition(intakePos);
         }
