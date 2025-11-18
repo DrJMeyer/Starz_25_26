@@ -105,7 +105,7 @@ private void launchCode(){
         if (blue >= .5 && motif[num] == 1){
             // a filler position until we test to see what opens the flap best
             sLaunch.setPosition(0);
-            // test and if needed add a wait function
+            // test and if needed add a wait function( Brady : its practical do eliminate error and increase accuracy)
             intakePos= intakePos + 1./3.;
             //change how much needs to be added if it does not revolve one slot
             sIntake.setPosition(intakePos);
@@ -118,6 +118,7 @@ private void launchCode(){
         sleep(1000);
         if (blue < .5 && motif[num] == 0) {
             lLauncher.setPower(1);
+            sleep(2000 );
             sLaunch.setPosition(1);
             intakePos= intakePos + 1./3.;
             sIntake.setPosition(intakePos);
