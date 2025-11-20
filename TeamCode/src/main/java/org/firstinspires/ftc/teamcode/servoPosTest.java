@@ -66,6 +66,9 @@ public class servoPosTest extends LinearOpMode {
             telemetry.addData("Servo", sIntake.getPosition());
             telemetry.addData("expected: ", intakePos);
         }
-
+        if (intakePos==1)
+            sIntake.setPosition(0);
+        telemetry.addData("Servo", sIntake.getPosition());
+        telemetry.addData("expected: ", intakePos);
     }
 }

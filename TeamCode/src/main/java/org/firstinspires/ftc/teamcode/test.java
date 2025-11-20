@@ -127,16 +127,15 @@ private void launchCode(){
 
         }
 
-        else {
+        else if (intakePos==1);
             lLauncher.setPower(0);
             rLauncher.setPower(0);
-            intakePos= intakePos + 1./3.;
-            sIntake.setPosition(intakePos);
+            sIntake.setPosition(0);
         }
     }
     // Loop through the motif list each time matching a ball in the magazine to the correct color.
 }
-}
+
 
 
 
