@@ -50,8 +50,8 @@ public class activation extends LinearOpMode {
 
     private int[] motif;
     public int IDnum;
-   public double intakePos;
-   public int num;
+    public double intakePos;
+    public int num;
 
 
     // The main program begins here.
@@ -137,10 +137,12 @@ public class activation extends LinearOpMode {
             //// This may also need to include a method of rotating the magazine as each ball is gathered.
             intakecode();
             // You will want a color sort and a launch code here. Likely connected functions activated by the press of a button
-            checkcolor();
+            sleep(3000);
+            nomove();
 
             launchCode();
-
+            sleep(3000);
+            nomove();
 
             telemetryAprilTag();
             telemetry.update();
@@ -159,15 +161,15 @@ public class activation extends LinearOpMode {
     }
 
     private void intakecode() {
-    if (gamepad1.dpad_left) {
+        if (gamepad1.dpad_left) {
             Intake.setPower(1);
             sIntake.setPosition(0);
 
         }
-    if (gamepad1.dpad_right){
-        intakePos= intakePos + 1./3.;
-        sIntake.setPosition(intakePos);
-    }
+        if (gamepad1.dpad_right){
+            intakePos= intakePos + 1./3.;
+            sIntake.setPosition(intakePos);
+        }
 
     }
 
@@ -191,47 +193,67 @@ public class activation extends LinearOpMode {
         telemetry.update();
     }
 
-    private double checkcolor() {
+
+    private void nomove(){
+        lLauncher.setPower(0);
+        rLauncher.setPower(0);
+        Intake.setPower(0);
+    }
+    private float checkgreen(){
+        colorSensor.setGain(16);
+        NormalizedRGBA colors = colorSensor.getNormalizedColors();
+        return colors.green;
+    }
+    private float checkblue() {
         // Check in with Brady on this code. It will be merged with his.
         telemetry.addData("Gain", 16);
         colorSensor.setGain(16);
         NormalizedRGBA colors = colorSensor.getNormalizedColors();
         telemetry.addLine()
                 .addData("Blue", "%.3f", colors.blue);
-            return colors.blue;
+        return colors.blue;
     }
+
+
 
     private void launchCode(){
 
         for(int i = 0; i <= 2; i ++){
-            if (checkcolor() >= .5 && motif[num] == 1){
+            float blue = checkblue();
+            float green = checkgreen();
+            if (blue >= .8 && motif[num] == 1) {
                 // a filler position until we test to see what opens the flap best
                 sLaunch.setPosition(1);
                 // test and if needed add a wait function
-                intakePos= intakePos + 1./3.;
+                intakePos = intakePos + 1. / 3.;
                 //change how much needs to be added if it does not revolve one slot
+                sleep(1000);
                 sIntake.setPosition(intakePos);
-                num ++;
+                num++;
                 i = 2;
-                    if (gamepad1.left_trigger == 1.0);{
-                        lLauncher.setPower(.8);
-                        rLauncher.setPower(.8);
-                        // put it back to orginal position
-                        sLaunch.setPosition(0);
-                    }
+                sleep(2000);
+                if (gamepad1.left_trigger == 1.0) ;
+                {
+                    lLauncher.setPower(.8);
+                    rLauncher.setPower(.8);
+                    // put it back to orginal position
+                    sLaunch.setPosition(0);
+                }
 
 
-            } else if (checkcolor() < .5 && motif[num] == 0) {
+            } if (green > .9 && motif[num] == 0) {
                 sLaunch.setPosition(1);
                 intakePos= intakePos + 1./3.;
+                sleep(1000);
                 sIntake.setPosition(intakePos);
                 num ++;
                 i = 2;
-                    if (gamepad1.left_trigger == 1.0);{
+                sleep(2000);
+                if (gamepad1.left_trigger == 1.0);{
                     lLauncher.setPower(.8);
                     rLauncher.setPower(.8);
                     sLaunch.setPosition(0);
-                    }
+                }
             } else {
                 intakePos= intakePos + 1./3.;
                 sIntake.setPosition(intakePos);
