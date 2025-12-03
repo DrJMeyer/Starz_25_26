@@ -43,6 +43,7 @@ initAprilTag();
         sleep(20);
     }
 }
+
 visionPortal.close();
 
 }
@@ -77,5 +78,7 @@ for (AprilTagDetection detection : currentDetections) {
 telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
 telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
 telemetry.addLine("RBE = Range, Bearing & Elevation");
+
+
 }
 }

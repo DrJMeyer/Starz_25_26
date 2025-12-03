@@ -23,7 +23,7 @@ public class test extends LinearOpMode {
     private DcMotor backRightDrive = null;
     private Servo sLaunch;
     private Servo sIntake;
-    private DcMotor Intake;
+    private DcMotor Intake = null;
     private DcMotor lLauncher;
     private DcMotor rLauncher;
     private Servo megabeam;
@@ -46,13 +46,12 @@ public class test extends LinearOpMode {
     public void runOpMode() {
         lLauncher = hardwareMap.get(DcMotor.class, "lL");
         rLauncher = hardwareMap.get(DcMotor.class, "rL");
-        Intake = hardwareMap.get(DcMotor.class, "Intake");
         sLaunch = hardwareMap.get(Servo.class, "sup");
         sIntake = hardwareMap.get(Servo.class, "dog");
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color");
         intakePos = 0;
         num = 0;
-        IDnum = 22;
+        IDnum = 21;
 
         ///// create an array (like a list) of the order you need to match for balls
         // you will hold onto that array and reference it later in code which will decide which ball to shoot.
@@ -79,81 +78,37 @@ public class test extends LinearOpMode {
 
         // Robot will continually move through this list of code until stop button is pressed on driver hub
         while (opModeIsActive()) {
-
-            telemetry.addData("gp","HIT A BUTTON");
-            sleep(2000);
-            intake();
-
-            sleep(3000);
-            no();
             launchCode();
-            sleep(3000);
-            no();
-
-
-
-
 
         }
     }
-
-    private void intake(){
-        if (gamepad1.aWasPressed()){
-            Intake.setPower(1);
-        }
-    }
-
-    private void no(){
-        lLauncher.setPower(0);
-        rLauncher.setPower(0);
-        Intake.setPower(0);
-    }
-
-    private float checkcolor () {
+    private double checkcolor () {
     // Check in with Brady on this code. It will be merged with his.
     colorSensor.setGain(16);
     NormalizedRGBA colors = colorSensor.getNormalizedColors();
-    telemetry.addData("Blue", "%.3f", colors.blue);
-    telemetry.update();
-    return colors.blue;
-    }
 
-    private float green () {
-        // Check in with Brady on this code. It will be merged with his.
-        colorSensor.setGain(16);
-        NormalizedRGBA colors = colorSensor.getNormalizedColors();
-        telemetry.addData("Green", "%.3f", colors.green);
-        telemetry.update();
-        return colors.green;
+    return colors.blue;
     }
 
 private void launchCode(){
 
     for(int i = 0; i <= 2; i ++){
-        float blue = checkcolor();
-        float green = green();
+        double blue = checkcolor();
 
         telemetry.addData("Blue", blue);
-        telemetry.addData("Green", green);
         telemetry.addData("Motif Needed", motif[num]);
         telemetry.addData("Num Index", num);
         telemetry.addData("Pot", sLaunch.getPosition());
         telemetry.addData("Pot2", sIntake.getPosition());
         telemetry.update();
 
-        if (blue >= .8 && motif[num] == 1){
+        if (blue >= .5 && motif[num] == 1){
             // a filler position until we test to see what opens the flap best
-            lLauncher.setPower(1);
-            sLaunch.setPosition(1);
-            sleep(1000);
-            intakePos = intakePos + 1. / 15.;
+            sLaunch.setPosition(0);
+            // test and if needed add a wait function( Brady : its practical do eliminate error and increase accuracy)
+            intakePos= intakePos + 1./3.;
+            //change how much needs to be added if it does not revolve one slot
             sIntake.setPosition(intakePos);
-            sleep(3000);
-                if (gamepad1.left_trigger == 1.0);{
-                lLauncher.setPower(.8);
-                rLauncher.setPower(.8);
-                sLaunch.setPosition(0);
-                }
             num = num + 1;
             i = 2;
 
@@ -161,27 +116,23 @@ private void launchCode(){
 
         }
         sleep(1000);
-        if (green > .9 && motif[num] == 0) {
-            lLauncher.setPower(.5);
+        if (blue < .5 && motif[num] == 0) {
+            lLauncher.setPower(1);
+            sleep(2000 );
             sLaunch.setPosition(1);
-            sleep(1000);
-            intakePos = intakePos + 1. / 15.;
+            intakePos= intakePos + 1./3.;
             sIntake.setPosition(intakePos);
-            sleep(3000);
-                if (gamepad1.left_trigger == 1.0);{
-                lLauncher.setPower(.1);
-                rLauncher.setPower(.8);
-                sLaunch.setPosition(0);
-                }
             num = num + 1;
             i = 2;
 
         }
 
         else {
-            rLauncher.setPower(1);
-
-                   }
+            lLauncher.setPower(0);
+            rLauncher.setPower(0);
+            intakePos= intakePos + 1./3.;
+            sIntake.setPosition(intakePos);
+        }
     }
     // Loop through the motif list each time matching a ball in the magazine to the correct color.
 }
