@@ -67,6 +67,10 @@ public class bradyauto extends LinearOpMode {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
+        lLauncher.setPower(0);
+        rLauncher.setPower(0);
+        sLaunch.setPosition(0);
+        sIntake.setPosition(0);
         frontLeftDrive.setPower(FORWARD_SPEED);
         frontRightDrive.setPower(FORWARD_SPEED);
         backLeftDrive.setPower(-FORWARD_SPEED);
@@ -76,5 +80,12 @@ public class bradyauto extends LinearOpMode {
             telemetry.update();
 
         }
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+        sleep(1000);
     }
 }
