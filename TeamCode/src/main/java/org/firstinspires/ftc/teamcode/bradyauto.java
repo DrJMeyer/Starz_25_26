@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -28,7 +28,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Robot: Auto Drive By Time", group="Robot")
 @Disabled
-public class RobotAutoDriveByTime_Linear extends LinearOpMode {
+public class bradyauto extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor frontLeftDrive = null;
@@ -39,8 +39,9 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
     private DcMotor rLauncher;
     private Servo sLaunch;
     private Servo sIntake;
-    static final double     FORWARD_SPEED = 0.6;
-    static final double     FORWARD_LAUNCH = 0.8;
+    static final double FORWARD_SPEED = 0.6;
+    static final double FORWARD_LAUNCH = 0.8;
+    private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -54,14 +55,26 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         rLauncher = hardwareMap.get(DcMotor.class, "rL");
         sLaunch = hardwareMap.get(Servo.class, "sup");
         sIntake = hardwareMap.get(Servo.class, "dog");
-        static final double     FORWARD_SPEED = 0.6;
         waitForStart();
 
 
+        lLauncher.setPower(FORWARD_LAUNCH);
+        rLauncher.setPower(FORWARD_LAUNCH);
+        sLaunch.setPosition(.5);
+        sIntake.setPosition(.5);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 8)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
         frontLeftDrive.setPower(FORWARD_SPEED);
         frontRightDrive.setPower(FORWARD_SPEED);
         backLeftDrive.setPower(-FORWARD_SPEED);
         backRightDrive.setPower(-FORWARD_SPEED);
-        lLauncher.setPower(FORWARD_LAUNCH);
+        while (opModeIsActive() && (runtime.seconds() < 4)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
 
+        }
     }
+}
