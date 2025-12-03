@@ -40,6 +40,8 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
     private Servo sLaunch;
     private Servo sIntake;
     static final double     FORWARD_SPEED = 0.6;
+    static final double     FORWARD_LAUNCH = 0.8;
+
     @Override
     public void runOpMode() {
 
@@ -52,8 +54,14 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         rLauncher = hardwareMap.get(DcMotor.class, "rL");
         sLaunch = hardwareMap.get(Servo.class, "sup");
         sIntake = hardwareMap.get(Servo.class, "dog");
-
+        static final double     FORWARD_SPEED = 0.6;
         waitForStart();
 
-        set
-}
+
+        frontLeftDrive.setPower(FORWARD_SPEED);
+        frontRightDrive.setPower(FORWARD_SPEED);
+        backLeftDrive.setPower(-FORWARD_SPEED);
+        backRightDrive.setPower(-FORWARD_SPEED);
+        lLauncher.setPower(FORWARD_LAUNCH);
+
+    }
