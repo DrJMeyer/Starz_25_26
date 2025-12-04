@@ -132,17 +132,15 @@ public class activation extends LinearOpMode {
 
             // First code checks if any gamepad is inputting a motion control (joystick activation)
             moverobot();
+            if (gamepad1.aWasPressed()) {
+                launchCode();
+                sleep(3000);
+                nomove();
+            }
 
             // Intake code. Also activated by the press of a button and with a deactivation mechanism.
             //// This may also need to include a method of rotating the magazine as each ball is gathered.
-            intakecode();
             // You will want a color sort and a launch code here. Likely connected functions activated by the press of a button
-            sleep(3000);
-            nomove();
-
-            launchCode();
-            sleep(3000);
-            nomove();
 
             telemetryAprilTag();
             telemetry.update();
@@ -188,6 +186,7 @@ public class activation extends LinearOpMode {
         frontRightDrive.setPower(frontRightPower);
         backLeftDrive.setPower(backLeftPower);
         backRightDrive.setPower(backRightPower);
+        intakecode();
         telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
         telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
         telemetry.update();
@@ -249,7 +248,7 @@ public class activation extends LinearOpMode {
                 num ++;
                 i = 2;
                 sleep(2000);
-                if (gamepad1.left_trigger == 1.0);{
+                if (gamepad1.right_trigger == 1.0);{
                     lLauncher.setPower(.8);
                     rLauncher.setPower(.8);
                     sLaunch.setPosition(0);
