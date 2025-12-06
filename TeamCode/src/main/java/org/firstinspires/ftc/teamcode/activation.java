@@ -32,13 +32,15 @@ import java.util.List;
 public class activation extends LinearOpMode {
 
     // Initialize all of our variables here
-    private DcMotor frontLeftDrive = null;
-    private DcMotor backLeftDrive = null;
-    private DcMotor frontRightDrive = null;
-    private DcMotor backRightDrive = null;
+    private DcMotor robotfpd = null;
+    private DcMotor robotbpd = null;
+
+    private DcMotor robotfsd = null;
+    private DcMotor robotbsd = null;
     private Servo sLaunch;
     private Servo sIntake;
     private DcMotor Intake = null;
+    private DcMotor lIntake = null;
     private DcMotor lLauncher;
     private DcMotor rLauncher;
     private Servo megabeam;
@@ -63,15 +65,17 @@ public class activation extends LinearOpMode {
         // with hardware configuration established on the control hub.
 
         // 4 driving motors
-        frontLeftDrive = hardwareMap.get(DcMotor.class, "fpd");
-        backLeftDrive = hardwareMap.get(DcMotor.class, "bpd");
-        frontRightDrive = hardwareMap.get(DcMotor.class, "fsd");
-        backRightDrive = hardwareMap.get(DcMotor.class, "bsd");
+        robotfpd = hardwareMap.get(DcMotor.class, "fpd");
+        robotbpd = hardwareMap.get(DcMotor.class, "bpd");
+        robotfsd = hardwareMap.get(DcMotor.class, "fsd");
+        robotbsd = hardwareMap.get(DcMotor.class, "bsd");
 
         //launch motors and intaek
         lLauncher = hardwareMap.get(DcMotor.class, "lL");
         rLauncher = hardwareMap.get(DcMotor.class, "rL");
-        Intake = hardwareMap.get(DcMotor.class, "inM" );
+        Intake = hardwareMap.get(DcMotor.class, "inR" );
+        lIntake = hardwareMap.get(DcMotor.class, "inL");
+
 
         // a servo. Which one?
         sLaunch = hardwareMap.get(Servo.class, "sup");
@@ -80,7 +84,7 @@ public class activation extends LinearOpMode {
         // color sensor (inside circular magazine)
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color");
         //intakePos
-        intakePos=0;
+        intakePos=1;
         num=0;
         // Still need:
         //// 1 webcam
@@ -89,11 +93,14 @@ public class activation extends LinearOpMode {
 
 
         // Set direction of drive motors
-        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        robotfpd.setDirection(DcMotor.Direction.FORWARD);
+        robotbpd.setDirection(DcMotor.Direction.FORWARD);
+        robotfsd.setDirection(DcMotor.Direction.REVERSE);
+        robotbsd.setDirection(DcMotor.Direction.REVERSE);
         Intake.setDirection(DcMotor.Direction.FORWARD);
+        lLauncher.setDirection(DcMotor.Direction.REVERSE);
+        rLauncher.setDirection(DcMotor.Direction.FORWARD);
+        lIntake.setDirection(DcMotor.Direction.FORWARD);
 
         // This is where we want to read the april tag and determine ball order.
 
@@ -127,14 +134,26 @@ public class activation extends LinearOpMode {
         // Program hangs out until play button is pressed
         waitForStart();
 
+        sIntake.setPosition(intakePos);
+
         // Robot will continually move through this list of code until stop button is pressed on driver hub
         while (opModeIsActive()) {
 
             // First code checks if any gamepad is inputting a motion control (joystick activation)
-            moverobot();
-            if (gamepad1.aWasPressed()) {
-                launchCode();
+            if (gamepad1.left_stick_x > 0 || gamepad1.left_stick_x < 0 || gamepad1.left_stick_y > 0 ||gamepad1.left_stick_y < -0 || gamepad1.right_stick_x > 0 || gamepad1.right_stick_x < -0){
+                while(gamepad1.left_stick_x > 0 || gamepad1.left_stick_x < 0 || gamepad1.left_stick_y > 0 ||gamepad1.left_stick_y < -0 || gamepad1.right_stick_x > 0 || gamepad1.right_stick_x < -0){
+                    moverobot();
+                }
+                nomove();
+            } else if (gamepad1.rightBumperWasPressed()) {
+                rLauncher.setPower(.8);
+                lLauncher.setPower(.8);
                 sleep(3000);
+                nomove();
+            } else if (gamepad1.yWasReleased() || gamepad1.x || gamepad1.leftBumperWasReleased()) {
+                intakecode();
+            }
+            else {
                 nomove();
             }
 
@@ -159,13 +178,20 @@ public class activation extends LinearOpMode {
     }
 
     private void intakecode() {
-        if (gamepad1.dpad_left) {
-            Intake.setPower(1);
-            sIntake.setPosition(0);
+        if (gamepad1.x) {
+            Intake.setPower(-1);
+            lIntake.setPower(-1);
+        } else {
+            Intake.setPower(0);
+            lIntake.setPower(0);
+        }
+        if (gamepad1.leftBumperWasPressed()){
+            sIntake.setPosition(1);
+            intakePos=1.;
 
         }
-        if (gamepad1.dpad_right){
-            intakePos= intakePos + 1./3.;
+        if (gamepad1.yWasPressed()){
+            intakePos= intakePos - 1./14.;
             sIntake.setPosition(intakePos);
         }
 
@@ -182,10 +208,10 @@ public class activation extends LinearOpMode {
         double frontRightPower = axial - lateral - yaw;
         double backLeftPower = axial - lateral + yaw;
         double backRightPower = axial + lateral - yaw;
-        frontLeftDrive.setPower(frontLeftPower);
-        frontRightDrive.setPower(frontRightPower);
-        backLeftDrive.setPower(backLeftPower);
-        backRightDrive.setPower(backRightPower);
+        robotfpd.setPower(frontLeftPower);
+        robotfsd.setPower(frontRightPower);
+        robotbpd.setPower(backLeftPower);
+        robotbsd.setPower(backRightPower);
         intakecode();
         telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
         telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
@@ -194,9 +220,14 @@ public class activation extends LinearOpMode {
 
 
     private void nomove(){
+        robotbsd.setPower(0);
+        robotbpd.setPower(0);
+        robotfsd.setPower(0);
+        robotfpd.setPower(0);
         lLauncher.setPower(0);
         rLauncher.setPower(0);
         Intake.setPower(0);
+        lIntake.setPower(0);
     }
     private float checkgreen(){
         colorSensor.setGain(16);
