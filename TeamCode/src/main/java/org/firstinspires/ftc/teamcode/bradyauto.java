@@ -76,6 +76,7 @@ public class bradyauto extends LinearOpMode {
         frontRightDrive.setPower(FORWARD_SPEED);
         backLeftDrive.setPower(-FORWARD_SPEED);
         backRightDrive.setPower(-FORWARD_SPEED);
+        runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 4)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
