@@ -61,6 +61,7 @@ public class bradyauto extends LinearOpMode {
         lLauncher.setPower(FORWARD_LAUNCH);
         rLauncher.setPower(FORWARD_LAUNCH);
         //sLaunch.setPosition(.5);
+        sleep(1000);
         sIntake.setPosition(.5);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 8)) {
