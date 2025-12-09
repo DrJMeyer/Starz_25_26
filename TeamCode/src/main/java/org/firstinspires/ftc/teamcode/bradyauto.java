@@ -27,7 +27,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Robot: Auto Drive By Time", group="Robot")
-@Disabled
+
 public class bradyauto extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -62,9 +62,9 @@ public class bradyauto extends LinearOpMode {
         rLauncher.setPower(FORWARD_LAUNCH);
         //sLaunch.setPosition(.5);
         sleep(1000);
-        sIntake.setPosition(.5);
+        sIntake.setPosition(-0.5);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 8)) {
+        while (opModeIsActive() && (runtime.seconds() < 4)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
@@ -74,8 +74,8 @@ public class bradyauto extends LinearOpMode {
         sIntake.setPosition(0);
         frontLeftDrive.setPower(FORWARD_SPEED);
         frontRightDrive.setPower(FORWARD_SPEED);
-        backLeftDrive.setPower(-FORWARD_SPEED);
-        backRightDrive.setPower(-FORWARD_SPEED);
+        backLeftDrive.setPower(FORWARD_SPEED);
+        backRightDrive.setPower(FORWARD_SPEED);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 4)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
