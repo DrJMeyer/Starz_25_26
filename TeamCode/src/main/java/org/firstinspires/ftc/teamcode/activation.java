@@ -170,6 +170,15 @@ public class activation extends LinearOpMode {
                nomove();
            }
 
+            if (gamepad1.x){
+                Intake.setPower(-1);
+                lIntake.setPower(-1);
+
+            } else {
+                Intake.setPower(0);
+                lIntake.setPower(0);
+            }
+
             aCurrent = gamepad1.a;
             bCurrent = gamepad1.b;
            // yCurrent = gamepad1.y;
@@ -212,26 +221,15 @@ public class activation extends LinearOpMode {
     }
 
     private void intakecode() {
-        aCurrent = gamepad1.a;
-        bCurrent = gamepad1.b;
-        yCurrent = gamepad1.y;
-        lbCurrent = gamepad1.left_bumper;
 
 
 
-        if (gamepad1.x){
-            Intake.setPower(-1);
-            lIntake.setPower(-1);
 
-        } else {
-            Intake.setPower(0);
-            lIntake.setPower(0);
-        }
+
+
 
         if (lbCurrent && !lbPrev){
-            intakePos = 1.;
-            sIntake.setPosition(intakePos);
-
+            launcherRunning = !launcherRunning;
         }
         if (aCurrent && !aPrev){
             intakePos = intakePos + 1./14.5;
@@ -255,15 +253,6 @@ public class activation extends LinearOpMode {
 
         }
 
-        if (yCurrent != yPrev){
-            if(yCurrent){
-                rLauncher.setPower(.75);
-                lLauncher.setPower(.75);
-            } else {
-                rLauncher.setPower(0);
-                lLauncher.setPower(0);
-            }
-        }
 
         if (launcherRunning) {
             rLauncher.setPower(.75);
@@ -296,14 +285,7 @@ public class activation extends LinearOpMode {
         double frontRightPower = axial - lateral - yaw;
         double backLeftPower = axial - lateral + yaw;
         double backRightPower = axial + lateral - yaw;
-        if (gamepad1.x){
-            Intake.setPower(-1);
-            lIntake.setPower(-1);
 
-        } else {
-            Intake.setPower(0);
-            lIntake.setPower(0);
-        }
 
         robotfpd.setPower(frontLeftPower);
         robotfsd.setPower(frontRightPower);
