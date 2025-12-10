@@ -39,8 +39,12 @@ public class bradyauto extends LinearOpMode {
     private DcMotor rLauncher;
     //private Servo sLaunch;
     private Servo sIntake;
+    private DcMotor Intake = null;
+    private DcMotor lIntake = null;
     static final double FORWARD_SPEED = 0.6;
-    static final double FORWARD_LAUNCH = 0.8;
+    static final double FORWARD_LAUNCH = .9;
+
+
     private ElapsedTime runtime = new ElapsedTime();
 
     @Override
@@ -55,14 +59,25 @@ public class bradyauto extends LinearOpMode {
         rLauncher = hardwareMap.get(DcMotor.class, "rL");
         //sLaunch = hardwareMap.get(Servo.class, "sup");
         sIntake = hardwareMap.get(Servo.class, "dog");
+
+        Intake = hardwareMap.get(DcMotor.class, "inR" );
+        lIntake = hardwareMap.get(DcMotor.class, "inL");
+        sIntake.setPosition(0.2);
+        Intake.setPower(-1);
+        lIntake.setPower(-1);
+        sleep(500);
+        Intake.setPower(0);
+        lIntake.setPower(0);
+        runtime.reset();
         waitForStart();
 
-
-        lLauncher.setPower(FORWARD_LAUNCH);
+        Intake.setPower(-1);
+        lIntake.setPower(-1);
+        lLauncher.setPower(-FORWARD_LAUNCH);
         rLauncher.setPower(FORWARD_LAUNCH);
         //sLaunch.setPosition(.5);
         sleep(1000);
-        sIntake.setPosition(-0.5);
+        sIntake.setPosition(0);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 4)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
@@ -70,12 +85,14 @@ public class bradyauto extends LinearOpMode {
         }
         lLauncher.setPower(0);
         rLauncher.setPower(0);
+        Intake.setPower(0);
+        lIntake.setPower(0);
         //sLaunch.setPosition(0);
-        sIntake.setPosition(0);
+        sIntake.setPosition(1);
         frontLeftDrive.setPower(FORWARD_SPEED);
-        frontRightDrive.setPower(FORWARD_SPEED);
+        frontRightDrive.setPower(-FORWARD_SPEED);
         backLeftDrive.setPower(FORWARD_SPEED);
-        backRightDrive.setPower(FORWARD_SPEED);
+        backRightDrive.setPower(-FORWARD_SPEED);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 4)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
