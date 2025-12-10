@@ -172,16 +172,16 @@ public class activation extends LinearOpMode {
 
             aCurrent = gamepad1.a;
             bCurrent = gamepad1.b;
-            yCurrent = gamepad1.y;
+           // yCurrent = gamepad1.y;
             lbCurrent = gamepad1.left_bumper;
 
-           if (aCurrent != aPrev || bCurrent != bPrev || lbCurrent != lbPrev || yCurrent != yPrev) {
+           if (aCurrent != aPrev || bCurrent != bPrev || lbCurrent != lbPrev || yCurrent != yPrev || gamepad1.x) {
                intakecode();
            }
 
             aPrev = aCurrent;
             bPrev = bCurrent;
-            yPrev = yCurrent;
+           // yPrev = yCurrent;
             lbPrev = lbCurrent;
 
 
@@ -219,7 +219,14 @@ public class activation extends LinearOpMode {
 
 
 
+        if (gamepad1.x){
+            Intake.setPower(-1);
+            lIntake.setPower(-1);
 
+        } else {
+            Intake.setPower(0);
+            lIntake.setPower(0);
+        }
 
         if (lbCurrent && !lbPrev){
             intakePos = 1.;
@@ -248,8 +255,14 @@ public class activation extends LinearOpMode {
 
         }
 
-        if (yCurrent && !yPrev){
-            launcherRunning = !launcherRunning;
+        if (yCurrent != yPrev){
+            if(yCurrent){
+                rLauncher.setPower(.75);
+                lLauncher.setPower(.75);
+            } else {
+                rLauncher.setPower(0);
+                lLauncher.setPower(0);
+            }
         }
 
         if (launcherRunning) {
@@ -266,6 +279,8 @@ public class activation extends LinearOpMode {
             intakePos = 0;
             sIntake.setPosition(intakePos);
         }
+
+        yPrev = yCurrent;
 
 
     }
@@ -305,10 +320,10 @@ public class activation extends LinearOpMode {
         robotbpd.setPower(0);
         robotfsd.setPower(0);
         robotfpd.setPower(0);
-        lLauncher.setPower(0);
-        rLauncher.setPower(0);
-        Intake.setPower(0);
-        lIntake.setPower(0);
+       // lLauncher.setPower(0);
+       // rLauncher.setPower(0);
+       // Intake.setPower(0);
+       // lIntake.setPower(0);
     }
     private float checkgreen(){
         colorSensor.setGain(16);
