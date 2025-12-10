@@ -53,14 +53,14 @@ public class bradyauto extends LinearOpMode {
         backRightDrive = hardwareMap.get(DcMotor.class, "bsd");
         lLauncher = hardwareMap.get(DcMotor.class, "lL");
         rLauncher = hardwareMap.get(DcMotor.class, "rL");
-        sLaunch = hardwareMap.get(Servo.class, "sup");
+        //sLaunch = hardwareMap.get(Servo.class, "sup");
         sIntake = hardwareMap.get(Servo.class, "dog");
         waitForStart();
 
 
         lLauncher.setPower(FORWARD_LAUNCH);
         rLauncher.setPower(FORWARD_LAUNCH);
-        sLaunch.setPosition(.5);
+       // sLaunch.setPosition(.5);
         sIntake.setPosition(.5);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 8)) {
@@ -69,7 +69,7 @@ public class bradyauto extends LinearOpMode {
         }
         lLauncher.setPower(0);
         rLauncher.setPower(0);
-        sLaunch.setPosition(0);
+        //sLaunch.setPosition(0);
         sIntake.setPosition(0);
         frontLeftDrive.setPower(FORWARD_SPEED);
         frontRightDrive.setPower(FORWARD_SPEED);
