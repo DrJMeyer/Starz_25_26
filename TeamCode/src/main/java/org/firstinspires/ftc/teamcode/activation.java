@@ -175,7 +175,7 @@ public class activation extends LinearOpMode {
             yCurrent = gamepad1.y;
             lbCurrent = gamepad1.left_bumper;
 
-           if (aCurrent != aPrev || bCurrent != bPrev || lbCurrent != lbPrev  || gamepad1.x || yCurrent != yPrev) {
+           if (aCurrent != aPrev || bCurrent != bPrev || lbCurrent != lbPrev || yCurrent != yPrev) {
                intakecode();
            }
 
@@ -217,13 +217,10 @@ public class activation extends LinearOpMode {
         yCurrent = gamepad1.y;
         lbCurrent = gamepad1.left_bumper;
 
-        if (gamepad1.x) {
-            Intake.setPower(-1);
-            lIntake.setPower(-1);
-        } else {
-            Intake.setPower(0);
-            lIntake.setPower(0);
-        }
+
+
+
+
         if (lbCurrent && !lbPrev){
             intakePos = 1.;
             sIntake.setPosition(intakePos);
@@ -243,7 +240,6 @@ public class activation extends LinearOpMode {
 
         if (bCurrent && !bPrev){
 
-            launcherRunning = true;
             intakePos= intakePos - 1./14.5;
             sIntake.setPosition(intakePos);
             y= y + 1;
@@ -253,7 +249,7 @@ public class activation extends LinearOpMode {
         }
 
         if (yCurrent && !yPrev){
-            launcherRunning = false;
+            launcherRunning = !launcherRunning;
         }
 
         if (launcherRunning) {
@@ -271,10 +267,6 @@ public class activation extends LinearOpMode {
             sIntake.setPosition(intakePos);
         }
 
-        aPrev = aCurrent;
-        bPrev = bCurrent;
-        yPrev = yCurrent;
-        lbPrev = lbCurrent;
 
     }
 
@@ -289,11 +281,19 @@ public class activation extends LinearOpMode {
         double frontRightPower = axial - lateral - yaw;
         double backLeftPower = axial - lateral + yaw;
         double backRightPower = axial + lateral - yaw;
+        if (gamepad1.x){
+            Intake.setPower(-1);
+            lIntake.setPower(-1);
+
+        } else {
+            Intake.setPower(0);
+            lIntake.setPower(0);
+        }
+
         robotfpd.setPower(frontLeftPower);
         robotfsd.setPower(frontRightPower);
         robotbpd.setPower(backLeftPower);
         robotbsd.setPower(backRightPower);
-        intakecode();
         telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
         telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
         telemetry.update();
