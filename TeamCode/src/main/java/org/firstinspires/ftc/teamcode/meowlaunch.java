@@ -28,8 +28,8 @@ public class meowlaunch extends LinearOpMode {
         while (opModeIsActive()) {
             if(gamepad1.a)
             {
-                meowtarLeft.setPower(.5);
-                meowtarRight.setPower(.5);
+                meowtarLeft.setPower(1);
+                meowtarRight.setPower(1);
                 meowvroLaunch.setPosition(.5);
             }
             else
