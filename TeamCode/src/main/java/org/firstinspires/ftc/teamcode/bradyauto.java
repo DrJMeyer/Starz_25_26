@@ -27,7 +27,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Robot: Auto Drive By Time", group="Robot")
-
+@Disabled
 public class bradyauto extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -37,7 +37,7 @@ public class bradyauto extends LinearOpMode {
     private DcMotor backRightDrive = null;
     private DcMotor lLauncher;
     private DcMotor rLauncher;
-    //private Servo sLaunch;
+    private Servo sLaunch;
     private Servo sIntake;
     static final double FORWARD_SPEED = 0.6;
     static final double FORWARD_LAUNCH = 0.8;
@@ -53,30 +53,28 @@ public class bradyauto extends LinearOpMode {
         backRightDrive = hardwareMap.get(DcMotor.class, "bsd");
         lLauncher = hardwareMap.get(DcMotor.class, "lL");
         rLauncher = hardwareMap.get(DcMotor.class, "rL");
-        //sLaunch = hardwareMap.get(Servo.class, "sup");
+        sLaunch = hardwareMap.get(Servo.class, "sup");
         sIntake = hardwareMap.get(Servo.class, "dog");
         waitForStart();
 
 
         lLauncher.setPower(FORWARD_LAUNCH);
         rLauncher.setPower(FORWARD_LAUNCH);
-        //sLaunch.setPosition(.5);
-        sleep(1000);
-        sIntake.setPosition(-0.5);
+        sLaunch.setPosition(.5);
+        sIntake.setPosition(.5);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 4)) {
+        while (opModeIsActive() && (runtime.seconds() < 8)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
         lLauncher.setPower(0);
         rLauncher.setPower(0);
-        //sLaunch.setPosition(0);
+        sLaunch.setPosition(0);
         sIntake.setPosition(0);
         frontLeftDrive.setPower(FORWARD_SPEED);
         frontRightDrive.setPower(FORWARD_SPEED);
-        backLeftDrive.setPower(FORWARD_SPEED);
-        backRightDrive.setPower(FORWARD_SPEED);
-        runtime.reset();
+        backLeftDrive.setPower(-FORWARD_SPEED);
+        backRightDrive.setPower(-FORWARD_SPEED);
         while (opModeIsActive() && (runtime.seconds() < 4)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();

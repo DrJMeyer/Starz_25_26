@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
+
 import android.annotation.SuppressLint;
 
 
@@ -54,6 +56,17 @@ public class activation extends LinearOpMode {
     public int IDnum;
     public double intakePos;
     public int num;
+    public double z;
+    public double y;
+    public boolean aPrev;
+    public boolean bPrev;
+    public boolean yPrev;
+    public boolean lbPrev;
+    public boolean aCurrent;
+    public boolean bCurrent;
+    public  boolean yCurrent;
+    public boolean lbCurrent;
+    public  boolean launcherRunning;
 
 
     // The main program begins here.
@@ -84,12 +97,24 @@ public class activation extends LinearOpMode {
         // color sensor (inside circular magazine)
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color");
         //intakePos
-        intakePos=1;
+        intakePos=0;
         num=0;
+        z = 0;
+        y=0;
+        aCurrent = false;
+        bCurrent = false;
+        yCurrent = false;
+        lbCurrent = false;
+        aPrev = false;
+        yPrev = false;
+        lbPrev = false;
+        launcherRunning = false;
+
+
         // Still need:
         //// 1 webcam
 
-        initAprilTag();
+        //initAprilTag();
 
 
         // Set direction of drive motors
@@ -104,7 +129,7 @@ public class activation extends LinearOpMode {
 
         // This is where we want to read the april tag and determine ball order.
 
-        IDnum = readAprilID();
+        //IDnum = readAprilID();
 
         ///// create an array (like a list) of the order you need to match for balls
         // you will hold onto that array and reference it later in code which will decide which ball to shoot.
@@ -134,34 +159,52 @@ public class activation extends LinearOpMode {
         // Program hangs out until play button is pressed
         waitForStart();
 
-        sIntake.setPosition(intakePos);
+        sIntake.setPosition(0);
 
         // Robot will continually move through this list of code until stop button is pressed on driver hub
         while (opModeIsActive()) {
 
+           if(gamepad1.left_stick_x > 0 || gamepad1.left_stick_x < 0 || gamepad1.left_stick_y > 0 ||gamepad1.left_stick_y < -0 || gamepad1.right_stick_x > 0 || gamepad1.right_stick_x < -0){
+               moverobot();
+           } else {
+               nomove();
+           }
+
+            if (gamepad1.x){
+                Intake.setPower(-1);
+                lIntake.setPower(-1);
+
+            } else {
+                Intake.setPower(0);
+                lIntake.setPower(0);
+            }
+
+            aCurrent = gamepad1.a;
+            bCurrent = gamepad1.b;
+           // yCurrent = gamepad1.y;
+            lbCurrent = gamepad1.left_bumper;
+
+           if (aCurrent != aPrev || bCurrent != bPrev || lbCurrent != lbPrev || yCurrent != yPrev || gamepad1.x) {
+               intakecode();
+           }
+
+            aPrev = aCurrent;
+            bPrev = bCurrent;
+           // yPrev = yCurrent;
+            lbPrev = lbCurrent;
+
+
+
+
+
             // First code checks if any gamepad is inputting a motion control (joystick activation)
-            if (gamepad1.left_stick_x > 0 || gamepad1.left_stick_x < 0 || gamepad1.left_stick_y > 0 ||gamepad1.left_stick_y < -0 || gamepad1.right_stick_x > 0 || gamepad1.right_stick_x < -0){
-                while(gamepad1.left_stick_x > 0 || gamepad1.left_stick_x < 0 || gamepad1.left_stick_y > 0 ||gamepad1.left_stick_y < -0 || gamepad1.right_stick_x > 0 || gamepad1.right_stick_x < -0){
-                    moverobot();
-                }
-                nomove();
-            } else if (gamepad1.rightBumperWasPressed()) {
-                rLauncher.setPower(.8);
-                lLauncher.setPower(.8);
-                sleep(3000);
-                nomove();
-            } else if (gamepad1.yWasReleased() || gamepad1.x || gamepad1.leftBumperWasReleased()) {
-                intakecode();
-            }
-            else {
-                nomove();
-            }
+
 
             // Intake code. Also activated by the press of a button and with a deactivation mechanism.
             //// This may also need to include a method of rotating the magazine as each ball is gathered.
             // You will want a color sort and a launch code here. Likely connected functions activated by the press of a button
 
-            telemetryAprilTag();
+           // telemetryAprilTag();
             telemetry.update();
 
             if (gamepad1.dpad_down) {
@@ -178,22 +221,56 @@ public class activation extends LinearOpMode {
     }
 
     private void intakecode() {
-        if (gamepad1.x) {
-            Intake.setPower(-1);
-            lIntake.setPower(-1);
-        } else {
-            Intake.setPower(0);
-            lIntake.setPower(0);
+
+
+
+
+
+
+
+        if (lbCurrent && !lbPrev){
+            launcherRunning = !launcherRunning;
         }
-        if (gamepad1.leftBumperWasPressed()){
-            sIntake.setPosition(1);
-            intakePos=1.;
+        if (aCurrent && !aPrev){
+            intakePos = intakePos + 1./14.5;
+            sIntake.setPosition(intakePos);
+            z = z +1;
+            telemetry.addData("Servo", sIntake.getPosition());
+            telemetry.addData("expected: ", intakePos);
+
+
+
 
         }
-        if (gamepad1.yWasPressed()){
-            intakePos= intakePos - 1./14.;
+
+        if (bCurrent && !bPrev){
+
+            intakePos= intakePos - 1./14.5;
+            sIntake.setPosition(intakePos);
+            y= y + 1;
+            telemetry.addData("Servo", sIntake.getPosition());
+            telemetry.addData("expected: ", intakePos);
+
+        }
+
+
+        if (launcherRunning) {
+            rLauncher.setPower(.75);
+            lLauncher.setPower(.75);
+        } else  {
+            rLauncher.setPower(0);
+            lLauncher.setPower(0);
+        }
+
+
+        intakePos = Range.clip(intakePos, 0.0, 1.0);
+        if(intakePos >= 1){
+            intakePos = 0;
             sIntake.setPosition(intakePos);
         }
+
+        yPrev = yCurrent;
+
 
     }
 
@@ -203,16 +280,17 @@ public class activation extends LinearOpMode {
         // This function looks great. Should be ready to test
         double axial = gamepad1.left_stick_y;
         double lateral = gamepad1.left_stick_x;
-        double yaw = gamepad1.right_stick_x;
+        double yaw = -gamepad1.right_stick_x;
         double frontLeftPower = axial + lateral + yaw;
         double frontRightPower = axial - lateral - yaw;
         double backLeftPower = axial - lateral + yaw;
         double backRightPower = axial + lateral - yaw;
+
+
         robotfpd.setPower(frontLeftPower);
         robotfsd.setPower(frontRightPower);
         robotbpd.setPower(backLeftPower);
         robotbsd.setPower(backRightPower);
-        intakecode();
         telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
         telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
         telemetry.update();
@@ -224,10 +302,10 @@ public class activation extends LinearOpMode {
         robotbpd.setPower(0);
         robotfsd.setPower(0);
         robotfpd.setPower(0);
-        lLauncher.setPower(0);
-        rLauncher.setPower(0);
-        Intake.setPower(0);
-        lIntake.setPower(0);
+       // lLauncher.setPower(0);
+       // rLauncher.setPower(0);
+       // Intake.setPower(0);
+       // lIntake.setPower(0);
     }
     private float checkgreen(){
         colorSensor.setGain(16);
@@ -297,8 +375,8 @@ public class activation extends LinearOpMode {
     private void initAprilTag() {
         aprilTag = AprilTagProcessor.easyCreateWithDefaults();
         if (USE_WEBCAM) {
-            visionPortal = VisionPortal.easyCreateWithDefaults(
-                    hardwareMap.get(WebcamName.class, "camera"), aprilTag);
+            //visionPortal = VisionPortal.easyCreateWithDefaults(
+                   //hardwareMap.get(WebcamName.class, "camera"), aprilTag);
 
 
         } else {
