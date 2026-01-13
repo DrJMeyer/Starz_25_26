@@ -1,20 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
 
 import java.util.List;
 
@@ -191,28 +186,6 @@ public class newv1 extends LinearOpMode {
         if (lbCurrent && !lbPrev){
             launcherRunning = !launcherRunning;
         }
-        if (aCurrent && !aPrev){
-            intakePos = intakePos + 1./14.5;
-            sIntake.setPosition(intakePos);
-            z = z +1;
-            telemetry.addData("Servo", sIntake.getPosition());
-            telemetry.addData("expected: ", intakePos);
-
-
-
-
-        }
-
-        if (bCurrent && !bPrev){
-
-            intakePos= intakePos - 1./14.5;
-            sIntake.setPosition(intakePos);
-            y= y + 1;
-            telemetry.addData("Servo", sIntake.getPosition());
-            telemetry.addData("expected: ", intakePos);
-
-        }
-
 
         if (launcherRunning) {
             rLauncher.setPower(.75);
@@ -268,7 +241,6 @@ public class newv1 extends LinearOpMode {
         // lIntake.setPower(0);
     }
 
-    }
 
 
 
@@ -278,12 +250,14 @@ public class newv1 extends LinearOpMode {
 
                 if (gamepad1.left_trigger == 1.0){
 
-                  sIntake.setPosition
+                  sIntake.setPosition(.3);
+                  sleep(1000);
+                    sIntake.setPosition(.6);
                     lLauncher.setPower(.8);
                     rLauncher.setPower(.8);
                     // put it back to orginal position
 
-                } else if ()
+                } else if (gamepad1.left_trigger == 0)
                     sIntake.setPosition(0);
 
 
@@ -291,14 +265,3 @@ public class newv1 extends LinearOpMode {
 
 
     }
-        // Loop through the motif list each time matching a ball in the magazine to the correct color.
-    }
-
-
-
-
-
-
-
-}
-
