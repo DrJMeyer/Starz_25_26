@@ -60,9 +60,23 @@ public class bradyauto extends LinearOpMode {
         rLauncher.setPower(FORWARD_LAUNCH);
         sIntake.setPosition(0);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 8)) {
+        while (opModeIsActive() && (runtime.seconds() < 4)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
+        }
+        lLauncher.setPower(FORWARD_LAUNCH);
+        rLauncher.setPower(-FORWARD_LAUNCH);
+        sleep(1000);
+        sIntake.setPosition(.75);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+
+        while (opModeIsActive() && (runtime.seconds() < 2)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+
         }
         lLauncher.setPower(0);
         rLauncher.setPower(0);
@@ -71,15 +85,36 @@ public class bradyauto extends LinearOpMode {
         frontRightDrive.setPower(FORWARD_SPEED);
         backLeftDrive.setPower(-FORWARD_SPEED);
         backRightDrive.setPower(-FORWARD_SPEED);
-        while (opModeIsActive() && (runtime.seconds() < 4)) {
+        sleep(1000);
+
+        while (opModeIsActive() && (runtime.seconds() < 1)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
 
         }
-        frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
-        backLeftDrive.setPower(0);
-        backRightDrive.setPower(0);
+        lLauncher.setPower(0);
+        rLauncher.setPower(0);
+        sIntake.setPosition(0);
+        frontLeftDrive.setPower(FORWARD_SPEED);
+        backLeftDrive.setPower(-FORWARD_SPEED);
+        backRightDrive.setPower(-FORWARD_SPEED);
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+        sleep(1000);
+        while (opModeIsActive() && (runtime.seconds() < 1)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+
+        }
+        frontRightDrive.setPower(0);
+        lLauncher.setPower(0);
+        rLauncher.setPower(0);
+        sIntake.setPosition(0);
+        frontLeftDrive.setPower(FORWARD_SPEED);
+        frontRightDrive.setPower(FORWARD_SPEED);
+        backLeftDrive.setPower(-FORWARD_SPEED);
+        backRightDrive.setPower(-FORWARD_SPEED);
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);
