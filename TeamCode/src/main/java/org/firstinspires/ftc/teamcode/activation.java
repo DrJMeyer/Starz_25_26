@@ -41,6 +41,7 @@ public class activation extends LinearOpMode {
     private DcMotor robotbsd = null;
     private Servo sLaunch;
     private Servo sIntake;
+    private Servo whack;
     private DcMotor Intake = null;
     private DcMotor lIntake = null;
     private DcMotor lLauncher;
@@ -91,11 +92,11 @@ public class activation extends LinearOpMode {
 
 
         // a servo. Which one?
-        sLaunch = hardwareMap.get(Servo.class, "sup");
-        sIntake = hardwareMap.get(Servo.class, "dog");
-
+       // sLaunch = hardwareMap.get(Servo.class, "sup");
+       //Intake = hardwareMap.get(Servo.class, "dog");
+        whack = hardwareMap.get(Servo.class, "whack");
         // color sensor (inside circular magazine)
-        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color");
+      //colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color");
         //intakePos
         intakePos=0;
         num=0;
@@ -233,10 +234,10 @@ public class activation extends LinearOpMode {
         }
         if (aCurrent && !aPrev){
             intakePos = intakePos + 1./14.5;
-            sIntake.setPosition(intakePos);
+            whack.setPosition(1);
             z = z +1;
-            telemetry.addData("Servo", sIntake.getPosition());
-            telemetry.addData("expected: ", intakePos);
+        //  telemetry.addData("Servo", sIntake.getPosition());
+          //telemetry.addData("expected: ", intakePos);
 
 
 
@@ -246,10 +247,10 @@ public class activation extends LinearOpMode {
         if (bCurrent && !bPrev){
 
             intakePos= intakePos - 1./14.5;
-            sIntake.setPosition(intakePos);
+            whack.setPosition(0);
             y= y + 1;
-            telemetry.addData("Servo", sIntake.getPosition());
-            telemetry.addData("expected: ", intakePos);
+          //telemetry.addData("Servo", sIntake.getPosition());
+          //telemetry.addData("expected: ", intakePos);
 
         }
 
