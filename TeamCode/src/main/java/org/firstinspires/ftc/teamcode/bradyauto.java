@@ -38,8 +38,12 @@ public class bradyauto extends LinearOpMode {
     private DcMotor lLauncher;
     private DcMotor rLauncher;
     private Servo sIntake;
+    private Servo whack;
+    private DcMotor Intake = null;
+    private DcMotor lIntake = null;
     static final double FORWARD_SPEED = 0.6;
     static final double FORWARD_LAUNCH = 0.8;
+    static final double FORWARD_INTAKE = 1;
     private ElapsedTime runtime = new ElapsedTime();
 
     @Override
@@ -52,13 +56,15 @@ public class bradyauto extends LinearOpMode {
         backRightDrive = hardwareMap.get(DcMotor.class, "bsd");
         lLauncher = hardwareMap.get(DcMotor.class, "lL");
         rLauncher = hardwareMap.get(DcMotor.class, "rL");
-        sIntake = hardwareMap.get(Servo.class, "dog");
+        Intake = hardwareMap.get(DcMotor.class, "inR" );
+        lIntake = hardwareMap.get(DcMotor.class, "inL");
+        whack = hardwareMap.get(Servo.class, "whack");
         waitForStart();
 
 
         lLauncher.setPower(FORWARD_LAUNCH);
         rLauncher.setPower(FORWARD_LAUNCH);
-        sIntake.setPosition(0);
+        whack.setPosition(.5);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 4)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
@@ -67,7 +73,7 @@ public class bradyauto extends LinearOpMode {
         lLauncher.setPower(FORWARD_LAUNCH);
         rLauncher.setPower(-FORWARD_LAUNCH);
         sleep(1000);
-        sIntake.setPosition(.75);
+        whack.setPosition(.75);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
@@ -80,7 +86,7 @@ public class bradyauto extends LinearOpMode {
         }
         lLauncher.setPower(0);
         rLauncher.setPower(0);
-        sIntake.setPosition(0);
+        whack.setPosition(0);
         frontLeftDrive.setPower(FORWARD_SPEED);
         frontRightDrive.setPower(FORWARD_SPEED);
         backLeftDrive.setPower(-FORWARD_SPEED);
@@ -95,7 +101,7 @@ public class bradyauto extends LinearOpMode {
         frontRightDrive.setPower(0);
         lLauncher.setPower(0);
         rLauncher.setPower(0);
-        sIntake.setPosition(0);
+        whack.setPosition(0);
         frontLeftDrive.setPower(FORWARD_SPEED);
         backLeftDrive.setPower(-FORWARD_SPEED);
         backRightDrive.setPower(-FORWARD_SPEED);
@@ -110,11 +116,13 @@ public class bradyauto extends LinearOpMode {
         frontRightDrive.setPower(0);
         lLauncher.setPower(0);
         rLauncher.setPower(0);
-        sIntake.setPosition(0);
+        whack.setPosition(0);
         frontLeftDrive.setPower(FORWARD_SPEED);
         frontRightDrive.setPower(FORWARD_SPEED);
         backLeftDrive.setPower(-FORWARD_SPEED);
         backRightDrive.setPower(-FORWARD_SPEED);
+        Intake.setPower(FORWARD_INTAKE);
+        lIntake.setPower(-FORWARD_INTAKE);
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);
