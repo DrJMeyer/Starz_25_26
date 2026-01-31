@@ -39,8 +39,8 @@ public class activation extends LinearOpMode {
 
     private DcMotor robotfsd = null;
     private DcMotor robotbsd = null;
-    private Servo whack;
-   // private Servo sIntake;
+    private Servo sLaunch;
+    private Servo sIntake;
     private DcMotor Intake = null;
     private DcMotor lIntake = null;
     private DcMotor lLauncher;
@@ -67,9 +67,6 @@ public class activation extends LinearOpMode {
     public  boolean yCurrent;
     public boolean lbCurrent;
     public  boolean launcherRunning;
-    public  boolean rbCurrent;
-    public boolean rbPrev;
-    public boolean farRunning;
 
 
     // The main program begins here.
@@ -94,7 +91,8 @@ public class activation extends LinearOpMode {
 
 
         // a servo. Which one?
-        whack = hardwareMap.get(Servo.class, "whack");
+        sLaunch = hardwareMap.get(Servo.class, "sup");
+        sIntake = hardwareMap.get(Servo.class, "dog");
 
         // color sensor (inside circular magazine)
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color");
@@ -111,9 +109,6 @@ public class activation extends LinearOpMode {
         yPrev = false;
         lbPrev = false;
         launcherRunning = false;
-        rbCurrent = false;
-        rbPrev = false;
-        farRunning = false;
 
 
         // Still need:
@@ -164,7 +159,7 @@ public class activation extends LinearOpMode {
         // Program hangs out until play button is pressed
         waitForStart();
 
-        whack.setPosition(0);
+        sIntake.setPosition(0);
 
         // Robot will continually move through this list of code until stop button is pressed on driver hub
         while (opModeIsActive()) {
@@ -188,17 +183,15 @@ public class activation extends LinearOpMode {
             bCurrent = gamepad1.b;
            // yCurrent = gamepad1.y;
             lbCurrent = gamepad1.left_bumper;
-            rbCurrent = gamepad1.right_bumper;
 
-          // if (aCurrent != aPrev || bCurrent != bPrev || lbCurrent != lbPrev  || gamepad1.x || rbCurrent != rbPrev) {
-           intakecode();
-           //}
+           if (aCurrent != aPrev || bCurrent != bPrev || lbCurrent != lbPrev || yCurrent != yPrev || gamepad1.x) {
+               intakecode();
+           }
 
             aPrev = aCurrent;
             bPrev = bCurrent;
            // yPrev = yCurrent;
             lbPrev = lbCurrent;
-            rbPrev = rbCurrent;
 
 
 
@@ -238,16 +231,12 @@ public class activation extends LinearOpMode {
         if (lbCurrent && !lbPrev){
             launcherRunning = !launcherRunning;
         }
-        if (rbCurrent && !rbPrev){
-            farRunning = !farRunning;
-        }
-
         if (aCurrent && !aPrev){
-            //intakePos = intakePos + 1./14.5;
-            whack.setPosition(1);
+            intakePos = intakePos + 1./14.5;
+            sIntake.setPosition(intakePos);
             z = z +1;
-            telemetry.addData("Servo", whack.getPosition());
-           // telemetry.addData("expected: ", intakePos);
+            telemetry.addData("Servo", sIntake.getPosition());
+            telemetry.addData("expected: ", intakePos);
 
 
 
@@ -256,11 +245,11 @@ public class activation extends LinearOpMode {
 
         if (bCurrent && !bPrev){
 
-          //  intakePos= intakePos - 1./14.5;
-            whack.setPosition(1);
+            intakePos= intakePos - 1./14.5;
+            sIntake.setPosition(intakePos);
             y= y + 1;
-            telemetry.addData("Servo", whack.getPosition());
-         //   telemetry.addData("expected: ", intakePos);
+            telemetry.addData("Servo", sIntake.getPosition());
+            telemetry.addData("expected: ", intakePos);
 
         }
 
@@ -273,20 +262,12 @@ public class activation extends LinearOpMode {
             lLauncher.setPower(0);
         }
 
-        if (farRunning){
-            rLauncher.setPower(.9);
-            lLauncher.setPower(.9);
-        } else {
-            rLauncher.setPower(0);
-            lLauncher.setPower(0);
+
+        intakePos = Range.clip(intakePos, 0.0, 1.0);
+        if(intakePos >= 1){
+            intakePos = 0;
+            sIntake.setPosition(intakePos);
         }
-
-
-       // intakePos = Range.clip(intakePos, 0.0, 1.0);
-        //if(intakePos >= 1){
-          //  intakePos = 0;
-            //whack.setPosition(intakePos);
-        //}
 
         yPrev = yCurrent;
 
@@ -350,12 +331,12 @@ public class activation extends LinearOpMode {
             float green = checkgreen();
             if (blue >= .8 && motif[num] == 1) {
                 // a filler position until we test to see what opens the flap best
-                whack.setPosition(1);
+                sLaunch.setPosition(1);
                 // test and if needed add a wait function
                 intakePos = intakePos + 1. / 3.;
                 //change how much needs to be added if it does not revolve one slot
                 sleep(1000);
-                whack.setPosition(intakePos);
+                sIntake.setPosition(intakePos);
                 num++;
                 i = 2;
                 sleep(2000);
@@ -364,26 +345,26 @@ public class activation extends LinearOpMode {
                     lLauncher.setPower(.8);
                     rLauncher.setPower(.8);
                     // put it back to orginal position
-                    whack.setPosition(0);
+                    sLaunch.setPosition(0);
                 }
 
 
             } if (green > .9 && motif[num] == 0) {
-                whack.setPosition(1);
+                sLaunch.setPosition(1);
                 intakePos= intakePos + 1./3.;
                 sleep(1000);
-                whack.setPosition(intakePos);
+                sIntake.setPosition(intakePos);
                 num ++;
                 i = 2;
                 sleep(2000);
                 if (gamepad1.right_trigger == 1.0);{
                     lLauncher.setPower(.8);
                     rLauncher.setPower(.8);
-                    whack.setPosition(0);
+                    sLaunch.setPosition(0);
                 }
             } else {
                 intakePos= intakePos + 1./3.;
-                whack.setPosition(intakePos);
+                sIntake.setPosition(intakePos);
             }
         }
         // Loop through the motif list each time matching a ball in the magazine to the correct color.
