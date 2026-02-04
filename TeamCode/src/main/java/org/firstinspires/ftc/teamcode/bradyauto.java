@@ -86,7 +86,7 @@ public class bradyauto extends LinearOpMode {
         }
         lLauncher.setPower(0);
         rLauncher.setPower(0);
-        whack.setPosition(0);
+       sIntake.setPosition(0);
         frontLeftDrive.setPower(FORWARD_SPEED);
         frontRightDrive.setPower(FORWARD_SPEED);
         backLeftDrive.setPower(-FORWARD_SPEED);
@@ -101,7 +101,7 @@ public class bradyauto extends LinearOpMode {
         frontRightDrive.setPower(0);
         lLauncher.setPower(0);
         rLauncher.setPower(0);
-        whack.setPosition(0);
+        sIntake.setPosition(0);
         frontLeftDrive.setPower(FORWARD_SPEED);
         backLeftDrive.setPower(-FORWARD_SPEED);
         backRightDrive.setPower(-FORWARD_SPEED);
@@ -116,7 +116,7 @@ public class bradyauto extends LinearOpMode {
         frontRightDrive.setPower(0);
         lLauncher.setPower(0);
         rLauncher.setPower(0);
-        whack.setPosition(0);
+        sIntake.setPosition(0);
         frontLeftDrive.setPower(FORWARD_SPEED);
         frontRightDrive.setPower(FORWARD_SPEED);
         backLeftDrive.setPower(-FORWARD_SPEED);
