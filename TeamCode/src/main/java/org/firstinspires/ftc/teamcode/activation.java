@@ -271,7 +271,7 @@ public class activation extends LinearOpMode {
 
         // This function looks great. Should be ready to test
         double axial = gamepad1.left_stick_y;
-        double lateral = gamepad1.left_stick_x;
+        double lateral = -gamepad1.left_stick_x;
         double yaw = -gamepad1.right_stick_x;
         double frontLeftPower = axial + lateral + yaw;
         double frontRightPower = axial - lateral - yaw;
