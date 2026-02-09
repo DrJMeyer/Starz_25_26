@@ -85,13 +85,13 @@ public class ENCODER extends LinearOpMode {
             robotfsd.setTargetPosition(newRightTarget);
 
             // Turn On RUN_TO_POSITION
-            leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robotfpd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robotfsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            leftDrive.setPower(Math.abs(speed));
-            rightDrive.setPower(Math.abs(speed));
+            robotfpd.setPower(Math.abs(speed));
+            robotfsd.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -101,22 +101,22 @@ public class ENCODER extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (leftDrive.isBusy() && rightDrive.isBusy())) {
+                    (robotfpd.isBusy() && robotfsd.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Running to",  " %7d :%7d", newLeftTarget,  newRightTarget);
                 telemetry.addData("Currently at",  " at %7d :%7d",
-                        leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition());
+                        robotfpd.getCurrentPosition(), robotfsd.getCurrentPosition());
                 telemetry.update();
             }
 
             // Stop all motion;
-            leftDrive.setPower(0);
-            rightDrive.setPower(0);
+            robotfpd.setPower(0);
+            robotfsd.setPower(0);
 
             // Turn off RUN_TO_POSITION
-            leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robotfpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robotfsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(250);   // optional pause after each move.
         }
