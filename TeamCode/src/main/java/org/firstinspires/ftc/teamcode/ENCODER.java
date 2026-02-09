@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+@Autonomous(name="Robot: ENCODER", group="Robot")
+@Disabled
 public class ENCODER extends LinearOpMode {
     private DcMotor robotfpd = null;
     private DcMotor robotbpd = null;
@@ -61,38 +63,46 @@ public class ENCODER extends LinearOpMode {
 
         // Wait for the game to start (driver presses START)
         waitForStart();
-        encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED,  48,  48, 48, 48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        encoderDrive(TURN_SPEED,   12, -12, 12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED, -24, -24, -24,  -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // pause to display final telemetry message.
     }
     public void encoderDrive(double speed,
-                             double leftInches, double rightInches,
+                             double fpdInches, double fsdInches, double bpdInches, double bsdInches,
                              double timeoutS) {
-        int newLeftTarget;
-        int newRightTarget;
+        int newfpdTarget;
+        int newfsdTarget;
+        int newbpdTarget;
+        int newbsdTarget;
 
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = robotfpd.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = robotfsd.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            robotfpd.setTargetPosition(newLeftTarget);
-            robotfsd.setTargetPosition(newRightTarget);
+            newfpdTarget = robotfpd.getCurrentPosition() + (int)(fpdInches * COUNTS_PER_INCH);
+            newfsdTarget = robotfsd.getCurrentPosition() + (int)(fsdInches * COUNTS_PER_INCH);
+            newbpdTarget = robotbpd.getCurrentPosition() + (int)(bpdInches * COUNTS_PER_INCH);
+            newbsdTarget = robotbsd.getCurrentPosition() + (int)(bsdInches * COUNTS_PER_INCH);
+            robotfpd.setTargetPosition(newfpdTarget);
+            robotfsd.setTargetPosition(newfsdTarget);
+            robotbpd.setTargetPosition(newbpdTarget);
+            robotbsd.setTargetPosition(newbsdTarget);
 
             // Turn On RUN_TO_POSITION
             robotfpd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robotfsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+            robotbpd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robotbsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             // reset the timeout time and start motion.
             runtime.reset();
             robotfpd.setPower(Math.abs(speed));
             robotfsd.setPower(Math.abs(speed));
-
+            robotbpd.setPower(Math.abs(speed));
+            robotbsd.setPower(Math.abs(speed));
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
             // its target position, the motion will stop.  This is "safer" in the event that the robot will
@@ -101,22 +111,25 @@ public class ENCODER extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robotfpd.isBusy() && robotfsd.isBusy())) {
+                    (robotfpd.isBusy() && robotfsd.isBusy() && robotbpd.isBusy() && robotbsd.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Running to",  " %7d :%7d", newLeftTarget,  newRightTarget);
+                telemetry.addData("Running to",  " %7d :%7d", newfpdTarget,  newfsdTarget, newbpdTarget, newbsdTarget);
                 telemetry.addData("Currently at",  " at %7d :%7d",
-                        robotfpd.getCurrentPosition(), robotfsd.getCurrentPosition());
+                        robotfpd.getCurrentPosition(), robotfsd.getCurrentPosition(), robotbpd.getCurrentPosition(), robotbsd.getCurrentPosition());
                 telemetry.update();
             }
 
             // Stop all motion;
             robotfpd.setPower(0);
             robotfsd.setPower(0);
-
+            robotbpd.setPower(0);
+            robotbsd.setPower(0);
             // Turn off RUN_TO_POSITION
             robotfpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robotfsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robotbpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robotbsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(250);   // optional pause after each move.
         }
