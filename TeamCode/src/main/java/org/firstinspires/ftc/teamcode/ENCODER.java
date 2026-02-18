@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Robot: ENCODER", group="Robot")
-@Disabled
+@Autonomous(name="Robot: MOVE THIS NOW", group="Robot")
+
 public class ENCODER extends LinearOpMode {
     private DcMotor robotfpd = null;
     private DcMotor robotbpd = null;
@@ -17,7 +17,7 @@ public class ENCODER extends LinearOpMode {
 
     private ElapsedTime runtime= new ElapsedTime();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 28 ;
+    static final double     COUNTS_PER_MOTOR_REV    = 112 ;
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;
     static final double     WHEEL_DIAMETER_INCHES   = 3.38583 ;
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
@@ -63,9 +63,9 @@ public class ENCODER extends LinearOpMode {
 
         // Wait for the game to start (driver presses START)
         waitForStart();
-        encoderDrive(DRIVE_SPEED,  48,  48, 48, 48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        encoderDrive(TURN_SPEED,   12, -12, 12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, -24, -24, -24,  -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED,  -167,  -167, -167, -167, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        encoderDrive(TURN_SPEED,   12, -12, 12, -12, 2.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED, -24, -24, -24,  -24, 2.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
