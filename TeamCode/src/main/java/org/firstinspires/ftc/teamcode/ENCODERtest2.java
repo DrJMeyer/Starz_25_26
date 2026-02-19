@@ -4,11 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Robot: MOVE THIS NOW", group="Robot")
+@Autonomous(name="Encoder Test 2", group="Robot")
 
-public class ENCODER extends LinearOpMode {
+public class ENCODERtest2 extends LinearOpMode {
     private DcMotor robotfpd = null;
     private DcMotor robotbpd = null;
 
@@ -17,12 +18,14 @@ public class ENCODER extends LinearOpMode {
 
     private ElapsedTime runtime= new ElapsedTime();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 112 ;
+    static final double     COUNTS_PER_MOTOR_REV    = 112*3.1415 ;
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;
     static final double     WHEEL_DIAMETER_INCHES   = 3.38583 ;
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.6;
-    static final double     TURN_SPEED              = 0.5;
+    static final double     DRIVE_SPEED             = 0.1;
+    static final double     TURN_SPEED              = 0.1;
+
+    static final double     ONE_REV                 = WHEEL_DIAMETER_INCHES * 3.1415;
 
 
     @Override
@@ -37,10 +40,10 @@ public class ENCODER extends LinearOpMode {
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        robotfpd.setDirection(DcMotor.Direction.FORWARD);
-        robotbpd.setDirection(DcMotor.Direction.FORWARD);
-        robotfsd.setDirection(DcMotor.Direction.REVERSE);
-        robotbsd.setDirection(DcMotor.Direction.REVERSE);
+        robotfpd.setDirection(DcMotor.Direction.REVERSE);
+        robotbpd.setDirection(DcMotor.Direction.REVERSE);
+        robotfsd.setDirection(DcMotor.Direction.FORWARD);
+        robotbsd.setDirection(DcMotor.Direction.FORWARD);
 
         robotfpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robotfsd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -62,12 +65,12 @@ public class ENCODER extends LinearOpMode {
 
         // Wait for the game to start (driver presses START)
         waitForStart();
-        encoderDrive(DRIVE_SPEED,  -167,  -167, -167, -167, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        encoderDrive(TURN_SPEED,   12, -12, 12, -12, 2.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, -24, -24, -24,  -24, 2.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED,  12,  -12, -12, 12, 10.0);  // Strafe right?
+        encoderDrive(TURN_SPEED, 39, -39, 39, -39, 50.0);
+        encoderDrive(DRIVE_SPEED,  -12,  12, 12, -12, 100.0);
 
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
+        //telemetry.addData("Path", "Complete");
+        //telemetry.update();
         sleep(1000);  // pause to display final telemetry message.
     }
     public void encoderDrive(double speed,
@@ -91,6 +94,10 @@ public class ENCODER extends LinearOpMode {
             robotbpd.setTargetPosition(newbpdTarget);
             robotbsd.setTargetPosition(newbsdTarget);
 
+            telemetry.addData("Starting at ",  "%7d", robotfpd.getCurrentPosition() );
+            telemetry.addData("Aiming at ",  "%7d", newfpdTarget );
+
+
             // Turn On RUN_TO_POSITION
             robotfpd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robotfsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -113,11 +120,14 @@ public class ENCODER extends LinearOpMode {
                     (robotfpd.isBusy() && robotfsd.isBusy() && robotbpd.isBusy() && robotbsd.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Running to",  " %7d :%7d", newfpdTarget,  newfsdTarget, newbpdTarget, newbsdTarget);
-                telemetry.addData("Currently at",  " at %7d :%7d",
-                        robotfpd.getCurrentPosition(), robotfsd.getCurrentPosition(), robotbpd.getCurrentPosition(), robotbsd.getCurrentPosition());
-                telemetry.update();
+             //   telemetry.addData("Running to",  " %7d :%7d", newfpdTarget,  newfsdTarget, newbpdTarget, newbsdTarget);
+             //   telemetry.addData("Currently at",  " at %7d :%7d",
+             //           robotfpd.getCurrentPosition(), robotfsd.getCurrentPosition(), robotbpd.getCurrentPosition(), robotbsd.getCurrentPosition());
+             //   telemetry.update();
             }
+
+            telemetry.addData("Arrived at ", "%7d", robotfpd.getCurrentPosition() );
+            telemetry.update();
 
             // Stop all motion;
             robotfpd.setPower(0);
@@ -125,12 +135,12 @@ public class ENCODER extends LinearOpMode {
             robotbpd.setPower(0);
             robotbsd.setPower(0);
             // Turn off RUN_TO_POSITION
-            robotfpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robotfsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robotbpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robotbsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+          //  robotfpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+          //  robotfsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+          //  robotbpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+          //  robotbsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            sleep(250);   // optional pause after each move.
+            //sleep(250);   // optional pause after each move.
         }
     }
 
