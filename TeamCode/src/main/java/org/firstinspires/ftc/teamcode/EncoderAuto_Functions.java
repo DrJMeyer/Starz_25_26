@@ -72,9 +72,12 @@ public class EncoderAuto_Functions extends LinearOpMode {
     }
 
 
-    public void Drive( double speed,
+    public void Drive( double speed, char direction,
                        double fpdInch, double fsdInch, double bpdInch, double bsdInch) {
 
+        if (opModeIsActive()) {
+
+        }
 
 
 
