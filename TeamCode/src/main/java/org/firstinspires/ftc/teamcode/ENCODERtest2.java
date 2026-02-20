@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Encoder Test 2", group="Robot")
@@ -15,6 +16,12 @@ public class ENCODERtest2 extends LinearOpMode {
 
     private DcMotor robotfsd = null;
     private DcMotor robotbsd = null;
+    private Servo whack;
+    // private Servo sIntake;
+    private DcMotor Intake = null;
+    private DcMotor lIntake = null;
+    private DcMotor lLauncher;
+    private DcMotor rLauncher;
 
     private ElapsedTime runtime= new ElapsedTime();
 
@@ -37,6 +44,11 @@ public class ENCODERtest2 extends LinearOpMode {
         robotbpd  = hardwareMap.get(DcMotor.class, "bpd");
         robotbsd = hardwareMap.get(DcMotor.class, "bsd");
 
+        lLauncher = hardwareMap.get(DcMotor.class, "lL");
+        rLauncher = hardwareMap.get(DcMotor.class, "rL");
+        Intake = hardwareMap.get(DcMotor.class, "inR" );
+        lIntake = hardwareMap.get(DcMotor.class, "inL");
+
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -44,6 +56,10 @@ public class ENCODERtest2 extends LinearOpMode {
         robotbpd.setDirection(DcMotor.Direction.REVERSE);
         robotfsd.setDirection(DcMotor.Direction.FORWARD);
         robotbsd.setDirection(DcMotor.Direction.FORWARD);
+        Intake.setDirection(DcMotor.Direction.REVERSE);
+        lLauncher.setDirection(DcMotor.Direction.REVERSE);
+        rLauncher.setDirection(DcMotor.Direction.REVERSE);
+        lIntake.setDirection(DcMotor.Direction.REVERSE);
 
         robotfpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robotfsd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -65,9 +81,30 @@ public class ENCODERtest2 extends LinearOpMode {
 
         // Wait for the game to start (driver presses START)
         waitForStart();
-        encoderDrive(DRIVE_SPEED,  12,  12, 12, 12, 10.0); // Forward
-        encoderDrive(TURN_SPEED, 39, -39, 39, -39, 50.0); // Turn
-        encoderDrive(DRIVE_SPEED,  -12,  12, 12, -12, 100.0); // Strafe
+        encoderDrive(DRIVE_SPEED,  52,  52, 52, 52, 10.0); // Forward
+        encoderDrive(TURN_SPEED, 19.5, -19.5, 19.5, -19.5, 50.0); // Turn
+       // Intake.setPower(1);
+        //lIntake.setPower(1);
+        encoderDrive(DRIVE_SPEED,  30,  30, 30, 30, 100.0); // Strafe
+        encoderDrive(DRIVE_SPEED,  -35,  -35, -35, -35, 10.0); // Forward
+        encoderDrive(DRIVE_SPEED,  -20,  20, 20, -20, 100.0); // Strafe
+        //lLauncher.setPower(1);
+        //rLauncher.setPower(1);
+        encoderDrive(TURN_SPEED, -9.5, 9.5, -9.5, 9.5, 50.0); // Turn
+        sleep(2000);
+        encoderDrive(TURN_SPEED, 9.5, -9.5, 9.5, -9.5, 50.0); // Turn
+        encoderDrive(DRIVE_SPEED,  30,  30, 30, 30, 100.0); // Strafe
+
+
+
+        //  encoderDrive(DRIVE_SPEED,  45,  45, 45, 45, 10.0); // Forward
+        //encoderDrive(DRIVE_SPEED,  12,  -12, -12, 12, 100.0); // Strafe
+
+
+
+
+        //encoderDrive(TURN_SPEED, 39, -39, 39, -39, 50.0); // Turn 180
+        //encoderDrive(DRIVE_SPEED,  -12,  12, 12, -12, 100.0); // Strafe
 
         //telemetry.addData("Path", "Complete");
         //telemetry.update();
