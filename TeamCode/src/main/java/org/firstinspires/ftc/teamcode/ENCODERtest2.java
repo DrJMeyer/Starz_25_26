@@ -22,8 +22,8 @@ public class ENCODERtest2 extends LinearOpMode {
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;
     static final double     WHEEL_DIAMETER_INCHES   = 3.38583 ;
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.1;
-    static final double     TURN_SPEED              = 0.1;
+    static final double     DRIVE_SPEED             = 0.25;
+    static final double     TURN_SPEED              = 0.25;
 
     static final double     ONE_REV                 = WHEEL_DIAMETER_INCHES * 3.1415;
 
@@ -65,9 +65,9 @@ public class ENCODERtest2 extends LinearOpMode {
 
         // Wait for the game to start (driver presses START)
         waitForStart();
-        encoderDrive(DRIVE_SPEED,  12,  -12, -12, 12, 10.0);  // Strafe right?
-        encoderDrive(TURN_SPEED, 39, -39, 39, -39, 50.0);
-        encoderDrive(DRIVE_SPEED,  -12,  12, 12, -12, 100.0);
+        encoderDrive(DRIVE_SPEED,  12,  12, 12, 12, 10.0); // Forward
+        encoderDrive(TURN_SPEED, 39, -39, 39, -39, 50.0); // Turn
+        encoderDrive(DRIVE_SPEED,  -12,  12, 12, -12, 100.0); // Strafe
 
         //telemetry.addData("Path", "Complete");
         //telemetry.update();
