@@ -132,7 +132,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
         }
 
-        MOVE(speed, "STRAFE", direction, FStarget, BStarget, FStarget, BStarget);
+        MOVE(speed, "STRAFE", direction, FStarget, BStarget, BStarget, FStarget);
 
     }
 
@@ -144,16 +144,16 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
-            if (direction.equals("R")) {
+            if (direction.equals("L")) {
                 Ptarget = (int) (angle * COUNTS_PER_INCH * INCH_PER_DEGREE) * -1;
                 Starget = (int) (angle * COUNTS_PER_INCH * INCH_PER_DEGREE);
-            } else if (direction.equals("L")) {
+            } else if (direction.equals("R")) {
                 Ptarget = (int) (angle * COUNTS_PER_INCH * INCH_PER_DEGREE);
                 Starget = (int) (angle * COUNTS_PER_INCH * INCH_PER_DEGREE) * -1;
 
             }
             else {
-                telemetry.addData("ERROR: INOCRRECT DIRECTION", direction);
+                telemetry.addData("ERROR: INCORRECT DIRECTION", direction);
                 telemetry.update();
                 return;
             }
