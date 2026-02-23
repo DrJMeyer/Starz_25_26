@@ -99,7 +99,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
                 CTtarget = (int) (dist * COUNTS_PER_INCH) * -1;
             }
             else {
-                telemetry.addData("ERROR: INOCRRECT DIRECTION", direction);
+                telemetry.addData("ERROR: INCORRECT DIRECTION", direction);
                 telemetry.update();
                 return;
             }
