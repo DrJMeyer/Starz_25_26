@@ -126,7 +126,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
 
             }
             else {
-                telemetry.addData("ERROR: INOCRRECT DIRECTION", direction);
+                telemetry.addData("ERROR: INCORRECT DIRECTION", direction);
                 telemetry.update();
                 return;
             }
