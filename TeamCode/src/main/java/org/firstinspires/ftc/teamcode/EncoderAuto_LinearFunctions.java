@@ -105,7 +105,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
         }
 
-        MOVE(speed, "DRIVE", direction, CTtarget, CTtarget, CTtarget, CTtarget);
+        MOVE(speed, "DRIVE", direction, FPD.getCurrentPosition() + CTtarget, FSD.getCurrentPosition() + CTtarget, BPD.getCurrentPosition() + CTtarget, BSD.getCurrentPosition() + CTtarget);
 
     }
 
@@ -132,7 +132,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
         }
 
-        MOVE(speed, "STRAFE", direction, FStarget, BStarget, BStarget, FStarget);
+        MOVE(speed, "STRAFE", direction, FPD.getCurrentPosition() + FStarget, FSD.getCurrentPosition() + BStarget, BPD.getCurrentPosition() + BStarget, BSD.getCurrentPosition() + FStarget);
 
     }
 
@@ -159,7 +159,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
         }
 
-        MOVE(speed, "PIVOT", direction, Ptarget, Starget, Ptarget, Starget);
+        MOVE(speed, "PIVOT", direction, FPD.getCurrentPosition() + Ptarget, FSD.getCurrentPosition() + Starget, BPD.getCurrentPosition() + Ptarget, BSD.getCurrentPosition() + Starget);
 
     }
 
