@@ -17,11 +17,13 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     static final double     PI  =   3.1415;
+    static final double     R2  =   Math.sqrt(2.);
+    static final double     Rwidth = 12.75;
     static final double     COUNTS_PER_MOTOR_REV    =   112 * PI;
     static final double     DRIVE_GEAR_REDUCTION    =   1.0;
     static final double     WHEEL_DIAMETER_INCHES   =   3.38583;
     static final double     COUNTS_PER_INCH         =   (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * PI);
-    static final double     INCH_PER_DEGREE         =   19.5 / 90.0; // Experimental value for determining pivot parameters. There is certainly a better way to approach this.
+    static final double     INCH_PER_DEGREE         =   19.5 / 90.0; // Experimental  value for determining pivot parameters. There is certainly a better way to approach this.
     static final double     DRIVE_SPEED             =   0.25;
     static final double     TURN_SPEED              =   0.25;
     static final double     ONE_REV                 =   WHEEL_DIAMETER_INCHES * PI;
@@ -71,20 +73,67 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         waitForStart();
 
         //// Fill with instructions here
-        DRIVE(DRIVE_SPEED, "F", 52);
+        ZOOM(DRIVE_SPEED,"FL", 53);
+       /* DRIVE(DRIVE_SPEED, "F", 52);
         PIVOT(TURN_SPEED, "R", 90.0);
 
         DRIVE(DRIVE_SPEED, "F", 30);
         DRIVE(DRIVE_SPEED, "R", 35);
         STRAFE(DRIVE_SPEED, "L", 20);
 
-        PIVOT(DRIVE_SPEED, "L", 45);
+        PIVOT(DRIVE_SPEED, "L", 45); */
+
 
 
         telemetry.addData("Auto","Complete");
         telemetry.update();
-    }
+    } //I want Zoom to be a turn while moving somewhere code, I think it may work, I don't really know though.
+    public void ZOOM (double speed,String direction, double dist) { //double angle removed for present use case
+        int LTarget = 0;
+        int RTarget = 0;
 
+
+        if (opModeIsActive()) {
+            if (direction.equals("FL")) { //forward left
+                LTarget=(int) ((PI/2.)*((dist/R2)+(Rwidth/2))*(COUNTS_PER_INCH));
+
+                RTarget=(int) ((PI/2.)*((dist/R2)-(Rwidth/2))*(COUNTS_PER_INCH));
+
+
+            }
+            else if (direction.equals("FR")) { //forward right
+                LTarget=(int) ((PI/2.)*((dist/R2)-(Rwidth/2))*(COUNTS_PER_INCH));
+
+                RTarget=(int) ((PI/2.)*((dist/R2)+(Rwidth/2))*(COUNTS_PER_INCH));
+
+            }
+            else if (direction.equals("BL")) {//backward left
+                LTarget=(int) (-1*(PI/2.)*((dist/R2)-(Rwidth/2))*(COUNTS_PER_INCH));
+
+                RTarget=(int) (-1*(PI/2.)*((dist/R2)+(Rwidth/2))*(COUNTS_PER_INCH));
+
+
+
+            }
+            else if (direction.equals("BR")) { //backward right
+                LTarget=(int) (-1*(PI/2.)*((dist/R2)+(Rwidth/2))*(COUNTS_PER_INCH));
+
+                RTarget=(int) (-1*(PI/2.)*((dist/R2)-(Rwidth/2))*(COUNTS_PER_INCH));
+            }
+            else {
+                telemetry.addData("ERROR: INCORRECT DIRECTION", direction);
+                telemetry.update();
+                return;
+
+            }
+
+
+            MOVE(speed, "ZOOM", direction, FPD.getCurrentPosition()+LTarget,FSD.getCurrentPosition()+RTarget, BPD.getCurrentPosition()+LTarget,BSD.getCurrentPosition()+RTarget );
+
+
+
+        }
+    }
 
     public void DRIVE( double speed, String direction, double dist ) {
 
@@ -111,8 +160,8 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
 
     public void STRAFE( double speed, String direction, double dist ) {
 
-        int FStarget = 0;
-        int BStarget = 0;
+        int FStarget = 0;//Front slash, forward slash goes upper right
+        int BStarget = 0;//back slash, leans back, goes upper left
 
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
@@ -135,7 +184,6 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         MOVE(speed, "STRAFE", direction, FPD.getCurrentPosition() + FStarget, FSD.getCurrentPosition() + BStarget, BPD.getCurrentPosition() + BStarget, BSD.getCurrentPosition() + FStarget);
 
     }
-
     public void PIVOT( double speed, String direction, double angle ) {
 
         int Starget = 0;
@@ -178,9 +226,9 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
 
         while (opModeIsActive() &&
                 (FPD.isBusy() || FSD.isBusy() || BPD.isBusy() || BSD.isBusy()) ) {
-                telemetry.addData(MVmotion, MVdir);
-                telemetry.update();
-            }
+            telemetry.addData(MVmotion, MVdir);
+            telemetry.update();
+        }
 
         FPD.setPower(0.0);
         FSD.setPower(0.0);
@@ -189,4 +237,4 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
 
     }
 
-    }
+}
