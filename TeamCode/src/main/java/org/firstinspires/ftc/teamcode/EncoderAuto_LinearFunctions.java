@@ -88,37 +88,43 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         telemetry.addData("Auto","Complete");
         telemetry.update();
     } //I want Zoom to be a turn while moving somewhere code, I think it may work, I don't really know though.
-    public void ZOOM (double speed,String direction, double dist) { //double angle removed for present use case
+
+    // Set the target time rather than speed and compute velocity for each set of wheels in this function.
+    // We will adjust setPower() in the MOVE function to setVelocity() and take a few more inputs.
+    // Also we will check if java allows us to overload functions.
+    //
+    public void ZOOM (double speed, String direction, double dist) { //double angle removed for present use case
         int LTarget = 0;
         int RTarget = 0;
+
+        double arcIN = (PI / 2) * ( (dist / R2) - (Rwidth / 2.) );
+        double arcOUT = (PI / 2) * ( (dist / R2) + (Rwidth / 2.) );
 
 
         if (opModeIsActive()) {
             if (direction.equals("FL")) { //forward left
-                LTarget=(int) ((PI/2.)*((dist/R2)+(Rwidth/2))*(COUNTS_PER_INCH));
+                LTarget=(int) ( arcIN * COUNTS_PER_INCH );
 
-                RTarget=(int) ((PI/2.)*((dist/R2)-(Rwidth/2))*(COUNTS_PER_INCH));
+                RTarget=(int) ( arcOUT * COUNTS_PER_INCH );
 
 
             }
             else if (direction.equals("FR")) { //forward right
-                LTarget=(int) ((PI/2.)*((dist/R2)-(Rwidth/2))*(COUNTS_PER_INCH));
+                LTarget=(int) ( arcOUT * COUNTS_PER_INCH );
 
-                RTarget=(int) ((PI/2.)*((dist/R2)+(Rwidth/2))*(COUNTS_PER_INCH));
+                RTarget=(int) ( arcIN * COUNTS_PER_INCH );
 
             }
             else if (direction.equals("BL")) {//backward left
-                LTarget=(int) (-1*(PI/2.)*((dist/R2)-(Rwidth/2))*(COUNTS_PER_INCH));
+                LTarget=(int) ( -1 * arcOUT * COUNTS_PER_INCH );
 
-                RTarget=(int) (-1*(PI/2.)*((dist/R2)+(Rwidth/2))*(COUNTS_PER_INCH));
-
-
+                RTarget=(int) ( -1 * arcIN * COUNTS_PER_INCH );
 
             }
             else if (direction.equals("BR")) { //backward right
-                LTarget=(int) (-1*(PI/2.)*((dist/R2)+(Rwidth/2))*(COUNTS_PER_INCH));
+                LTarget=(int) ( -1 * arcIN * COUNTS_PER_INCH );
 
-                RTarget=(int) (-1*(PI/2.)*((dist/R2)-(Rwidth/2))*(COUNTS_PER_INCH));
+                RTarget=(int) ( -1 * arcOUT * COUNTS_PER_INCH );
             }
             else {
                 telemetry.addData("ERROR: INCORRECT DIRECTION", direction);
@@ -128,7 +134,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
 
 
-            MOVE(speed, "ZOOM", direction, FPD.getCurrentPosition()+LTarget,FSD.getCurrentPosition()+RTarget, BPD.getCurrentPosition()+LTarget,BSD.getCurrentPosition()+RTarget );
+            MOVE(speed, "ZOOM", direction, LTarget, RTarget, LTarget, RTarget );
 
 
 
@@ -154,7 +160,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
         }
 
-        MOVE(speed, "DRIVE", direction, FPD.getCurrentPosition() + CTtarget, FSD.getCurrentPosition() + CTtarget, BPD.getCurrentPosition() + CTtarget, BSD.getCurrentPosition() + CTtarget);
+        MOVE(speed, "DRIVE", direction, CTtarget, CTtarget, CTtarget, CTtarget);
 
     }
 
@@ -181,7 +187,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
         }
 
-        MOVE(speed, "STRAFE", direction, FPD.getCurrentPosition() + FStarget, FSD.getCurrentPosition() + BStarget, BPD.getCurrentPosition() + BStarget, BSD.getCurrentPosition() + FStarget);
+        MOVE(speed, "STRAFE", direction, FStarget, BStarget, BStarget, FStarget);
 
     }
     public void PIVOT( double speed, String direction, double angle ) {
@@ -207,17 +213,17 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
         }
 
-        MOVE(speed, "PIVOT", direction, FPD.getCurrentPosition() + Ptarget, FSD.getCurrentPosition() + Starget, BPD.getCurrentPosition() + Ptarget, BSD.getCurrentPosition() + Starget);
+        MOVE(speed, "PIVOT", direction, Ptarget, Starget, Ptarget, Starget);
 
     }
 
     public void MOVE( double MVspeed, String MVmotion, String MVdir, int FPDinst, int FSDinst, int BPDinst, int BSDinst) {
 
         // Pass target position to motor controller
-        FPD.setTargetPosition(FPDinst);
-        FSD.setTargetPosition(FSDinst);
-        BPD.setTargetPosition(BPDinst);
-        BSD.setTargetPosition(BSDinst);
+        FPD.setTargetPosition(FPD.getCurrentPosition() + FPDinst);
+        FSD.setTargetPosition(FSD.getCurrentPosition() + FSDinst);
+        BPD.setTargetPosition(BPD.getCurrentPosition() + BPDinst);
+        BSD.setTargetPosition(BSD.getCurrentPosition() + BSDinst);
 
         FPD.setPower(MVspeed);
         FSD.setPower(MVspeed);
