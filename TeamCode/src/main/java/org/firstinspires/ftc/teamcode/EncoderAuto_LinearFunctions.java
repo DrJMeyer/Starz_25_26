@@ -74,7 +74,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         waitForStart();
 
         //// Fill with instructions here
-        ZOOM("FL", 56, 50);
+        ZOOM("FL", 56, 25);
        /* DRIVE(DRIVE_SPEED, "F", 52);
         PIVOT(TURN_SPEED, "R", 90.0);
 
@@ -103,9 +103,9 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
 
 
         double arcIN = (PI / 2) * ( (dist / R2) - (Rwidth / 2.) );
-        double arcINspd = (PI / 2) * ( (dist / R2) - (Rwidth / 2.)/time );
+        double arcINspd = (PI / 2) * ( (dist / R2) - (Rwidth / 2.)) /time ;
 
-        double arcOUTspd = (PI / 2) * ( (dist / R2) + (Rwidth / 2.)/time );
+        double arcOUTspd = (PI / 2) * ( (dist / R2) + (Rwidth / 2.)) /time ;
         double arcOUT = (PI / 2) * ( (dist / R2) + (Rwidth / 2.));
 
 
@@ -130,11 +130,11 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             else if (direction.equals("FR")) { //forward right
                 LTarget=(int) ( arcOUT * COUNTS_PER_INCH );
 
-                LSpeed=(double)(arcOUTspd *COUNTS_PER_INCH);
+                LSpeed=(arcOUTspd *COUNTS_PER_INCH);
 
                 RTarget=(int) ( arcIN * COUNTS_PER_INCH );
 
-                RSpeed=(double)(arcINspd *COUNTS_PER_INCH);
+                RSpeed=(arcINspd *COUNTS_PER_INCH);
 
 
             }
@@ -272,6 +272,8 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         FSD.setPower(0.0);
         BPD.setPower(0.0);
         BSD.setPower(0.0);
+
+
 
 
 
