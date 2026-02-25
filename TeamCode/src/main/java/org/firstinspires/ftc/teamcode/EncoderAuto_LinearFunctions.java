@@ -3,15 +3,16 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Encoder Functions", group="Robot")
 
 public class EncoderAuto_LinearFunctions extends LinearOpMode {
-    private DcMotor FPD = null;
-    private DcMotor FSD = null;
-    private DcMotor BPD = null;
-    private DcMotor BSD = null;
+    private DcMotorEx FPD = null;
+    private DcMotorEx FSD = null;
+    private DcMotorEx BPD = null;
+    private DcMotorEx BSD = null;
 
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -34,10 +35,10 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
     public void runOpMode() {
 
         // Initialize hardware map
-        FPD = hardwareMap.get(DcMotor.class, "fpd");
-        FSD = hardwareMap.get(DcMotor.class, "fsd");
-        BPD = hardwareMap.get(DcMotor.class, "bpd");
-        BSD = hardwareMap.get(DcMotor.class, "bsd");
+        FPD = hardwareMap.get(DcMotorEx.class, "fpd");
+        FSD = hardwareMap.get(DcMotorEx.class, "fsd");
+        BPD = hardwareMap.get(DcMotorEx.class, "bpd");
+        BSD = hardwareMap.get(DcMotorEx.class, "bsd");
 
         // Set wheel direction
         FPD.setDirection(DcMotor.Direction.REVERSE);
@@ -73,7 +74,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         waitForStart();
 
         //// Fill with instructions here
-        ZOOM(DRIVE_SPEED,"FL", 53);
+        ZOOM("FL", 56, 50);
        /* DRIVE(DRIVE_SPEED, "F", 52);
         PIVOT(TURN_SPEED, "R", 90.0);
 
@@ -93,38 +94,69 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
     // We will adjust setPower() in the MOVE function to setVelocity() and take a few more inputs.
     // Also we will check if java allows us to overload functions.
     //
-    public void ZOOM (double speed, String direction, double dist) { //double angle removed for present use case
+    public void ZOOM ( String direction, double dist, double time) { //double angle removed for present use case
         int LTarget = 0;
         int RTarget = 0;
+        double LSpeed = 0;
+        double RSpeed = 0;
+
+
 
         double arcIN = (PI / 2) * ( (dist / R2) - (Rwidth / 2.) );
-        double arcOUT = (PI / 2) * ( (dist / R2) + (Rwidth / 2.) );
+        double arcINspd = (PI / 2) * ( (dist / R2) - (Rwidth / 2.)/time );
+
+        double arcOUTspd = (PI / 2) * ( (dist / R2) + (Rwidth / 2.)/time );
+        double arcOUT = (PI / 2) * ( (dist / R2) + (Rwidth / 2.));
+
+
+
 
 
         if (opModeIsActive()) {
             if (direction.equals("FL")) { //forward left
                 LTarget=(int) ( arcIN * COUNTS_PER_INCH );
 
+                LSpeed=(double)(arcINspd *COUNTS_PER_INCH);
+
+
+
                 RTarget=(int) ( arcOUT * COUNTS_PER_INCH );
+
+                RSpeed=(double)(arcOUTspd *COUNTS_PER_INCH);
+
 
 
             }
             else if (direction.equals("FR")) { //forward right
                 LTarget=(int) ( arcOUT * COUNTS_PER_INCH );
 
+                LSpeed=(double)(arcOUTspd *COUNTS_PER_INCH);
+
                 RTarget=(int) ( arcIN * COUNTS_PER_INCH );
+
+                RSpeed=(double)(arcINspd *COUNTS_PER_INCH);
+
 
             }
             else if (direction.equals("BL")) {//backward left
                 LTarget=(int) ( -1 * arcOUT * COUNTS_PER_INCH );
 
+                LSpeed=(double)(-1 *(arcOUTspd *COUNTS_PER_INCH));
+
+
                 RTarget=(int) ( -1 * arcIN * COUNTS_PER_INCH );
+                RSpeed=(double)(-1 *(arcINspd *COUNTS_PER_INCH));
+
 
             }
             else if (direction.equals("BR")) { //backward right
                 LTarget=(int) ( -1 * arcIN * COUNTS_PER_INCH );
+                LSpeed=(double)(-1 *(arcINspd *COUNTS_PER_INCH));
+
 
                 RTarget=(int) ( -1 * arcOUT * COUNTS_PER_INCH );
+                RSpeed=(double)(-1 *(arcOUTspd *COUNTS_PER_INCH));
+
             }
             else {
                 telemetry.addData("ERROR: INCORRECT DIRECTION", direction);
@@ -134,7 +166,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
 
 
-            MOVE(speed, "ZOOM", direction, LTarget, RTarget, LTarget, RTarget );
+            MOVE(LSpeed, RSpeed, "ZOOM", direction, LTarget, RTarget, LTarget, RTarget );
 
 
 
@@ -160,7 +192,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
         }
 
-        MOVE(speed, "DRIVE", direction, CTtarget, CTtarget, CTtarget, CTtarget);
+        MOVE(speed, speed, "DRIVE", direction, CTtarget, CTtarget, CTtarget, CTtarget);
 
     }
 
@@ -187,7 +219,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
         }
 
-        MOVE(speed, "STRAFE", direction, FStarget, BStarget, BStarget, FStarget);
+        MOVE(speed, speed, "STRAFE", direction, FStarget, BStarget, BStarget, FStarget);
 
     }
     public void PIVOT( double speed, String direction, double angle ) {
@@ -213,11 +245,11 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
             }
         }
 
-        MOVE(speed, "PIVOT", direction, Ptarget, Starget, Ptarget, Starget);
+        MOVE(speed, speed,"PIVOT", direction, Ptarget, Starget, Ptarget, Starget);
 
     }
 
-    public void MOVE( double MVspeed, String MVmotion, String MVdir, int FPDinst, int FSDinst, int BPDinst, int BSDinst) {
+    public void MOVE( double Lspeed, double Rspeed, String MVmotion, String MVdir, int FPDinst, int FSDinst, int BPDinst, int BSDinst) {
 
         // Pass target position to motor controller
         FPD.setTargetPosition(FPD.getCurrentPosition() + FPDinst);
@@ -225,10 +257,10 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         BPD.setTargetPosition(BPD.getCurrentPosition() + BPDinst);
         BSD.setTargetPosition(BSD.getCurrentPosition() + BSDinst);
 
-        FPD.setPower(MVspeed);
-        FSD.setPower(MVspeed);
-        BPD.setPower(MVspeed);
-        BSD.setPower(MVspeed);
+        FPD.setVelocity(Lspeed);
+        FSD.setVelocity(Rspeed);
+        BPD.setVelocity(Lspeed);
+        BSD.setVelocity(Rspeed);
 
         while (opModeIsActive() &&
                 (FPD.isBusy() || FSD.isBusy() || BPD.isBusy() || BSD.isBusy()) ) {
@@ -240,6 +272,14 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         FSD.setPower(0.0);
         BPD.setPower(0.0);
         BSD.setPower(0.0);
+
+
+
+
+
+
+
+
 
     }
 
