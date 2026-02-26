@@ -74,9 +74,13 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         waitForStart();
 
         //// Fill with instructions here
-        ZOOM("FL", 56, 25);
-       /* DRIVE(DRIVE_SPEED, "F", 52);
-        PIVOT(TURN_SPEED, "R", 90.0);
+        DRIVE(DRIVE_SPEED, "F", 12);
+        DRIVE(DRIVE_SPEED, "B", 12);
+        
+        /*ZOOM("FL", 12, 10);
+        ZOOM("BL", 12, 10);
+       /*DRIVE(DRIVE_SPEED, "F", 12);
+         PIVOT(TURN_SPEED, "R", 90.0);
 
         DRIVE(DRIVE_SPEED, "F", 30);
         DRIVE(DRIVE_SPEED, "R", 35);
@@ -273,16 +277,33 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         BPD.setPower(0.0);
         BSD.setPower(0.0);
 
+    }
 
+    public void MOVE( double speed, String MVmotion, String MVdir, int FPDinst, int FSDinst, int BPDinst, int BSDinst) {
 
+        // Pass target position to motor controller
+        FPD.setTargetPosition(FPD.getCurrentPosition() + FPDinst);
+        FSD.setTargetPosition(FSD.getCurrentPosition() + FSDinst);
+        BPD.setTargetPosition(BPD.getCurrentPosition() + BPDinst);
+        BSD.setTargetPosition(BSD.getCurrentPosition() + BSDinst);
 
+        FPD.setPower(speed);
+        FSD.setPower(speed);
+        BPD.setPower(speed);
+        BSD.setPower(speed);
 
+        while (opModeIsActive() &&
+                (FPD.isBusy() || FSD.isBusy() || BPD.isBusy() || BSD.isBusy()) ) {
+            telemetry.addData(MVmotion, MVdir);
+            telemetry.update();
+        }
 
-
-
-
-
+        FPD.setPower(0.0);
+        FSD.setPower(0.0);
+        BPD.setPower(0.0);
+        BSD.setPower(0.0);
 
     }
+
 
 }
