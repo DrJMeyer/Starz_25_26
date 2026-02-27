@@ -74,8 +74,9 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         waitForStart();
 
         //// Fill with instructions here
-        DRIVE(DRIVE_SPEED, "F", 12);
-        DRIVE(DRIVE_SPEED, "B", 12);
+       // DRIVE(DRIVE_SPEED, "F", 12);
+        //DRIVE(DRIVE_SPEED, "B", 12);
+        ZOOM("FR",56, 90, 10);
         
         /*ZOOM("FL", 12, 10);
         ZOOM("BL", 12, 10);
@@ -98,19 +99,24 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
     // We will adjust setPower() in the MOVE function to setVelocity() and take a few more inputs.
     // Also we will check if java allows us to overload functions.
     //
-    public void ZOOM ( String direction, double dist, double time) { //double angle removed for present use case
+    public void ZOOM ( String direction, double dist, double angle, double time) { //double angle removed for present use case
         int LTarget = 0;
         int RTarget = 0;
         double LSpeed = 0;
         double RSpeed = 0;
 
+        double radangle = (angle) *(PI/180);
+        double theta = (PI/2) - (radangle);
+        double x = (radangle + (PI/2))/2;
+        double radius = (dist/(Math.sin(x)))*(Math.sin(theta));
 
 
-        double arcIN = (PI / 2) * ( (dist / R2) - (Rwidth / 2.) );
-        double arcINspd = (PI / 2) * ( (dist / R2) - (Rwidth / 2.)) /time ;
 
-        double arcOUTspd = (PI / 2) * ( (dist / R2) + (Rwidth / 2.)) /time ;
-        double arcOUT = (PI / 2) * ( (dist / R2) + (Rwidth / 2.));
+        double arcIN = (PI/2) * (dist/R2 - (Rwidth / 2.) );
+        double arcINspd =  arcIN/time ;
+
+        double arcOUT = (theta) * ( radius + (Rwidth / 2.));
+        double arcOUTspd = arcOUT /time ;
 
 
 
@@ -168,6 +174,14 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
                 return;
 
             }
+
+            telemetry.addData("%7d", LTarget);
+            telemetry.addData("%7d", RTarget);
+            telemetry.addData("%7d", LSpeed);
+            telemetry.addData("%7d", RSpeed);
+
+
+
 
 
             MOVE(LSpeed, RSpeed, "ZOOM", direction, LTarget, RTarget, LTarget, RTarget );
