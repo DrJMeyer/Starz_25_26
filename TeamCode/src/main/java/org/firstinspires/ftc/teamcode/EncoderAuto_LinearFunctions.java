@@ -105,14 +105,15 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         double LSpeed = 0;
         double RSpeed = 0;
 
-        double radangle = (angle) *(PI/180);
+        double radangle = (angle) *(PI/180);//conversion to radians
         double theta = (PI/2) - (radangle);
         double x = (radangle + (PI/2))/2;
-        double radius = (dist/(Math.sin(x)))*(Math.sin(theta));
+       // double radius = (dist/(Math.sin(theta)))*(Math.sin(x));flipped theta and x
+        double radius = (dist)/(2*Math.cos(x));
 
 
 
-        double arcIN = (PI/2) * (dist/R2 - (Rwidth / 2.) );
+        double arcIN = ((radius)-Rwidth/2) * theta;
         double arcINspd =  arcIN/time ;
 
         double arcOUT = (theta) * ( radius + (Rwidth / 2.));
