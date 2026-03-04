@@ -76,7 +76,11 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         //// Fill with instructions here
        // DRIVE(DRIVE_SPEED, "F", 12);
         //DRIVE(DRIVE_SPEED, "B", 12);
-        ZOOM("FR",56, 90, 10);
+        ZOOM("FR",56, 45, 4);
+        ZOOM("FR",56, 90, 5);
+        ZOOM("FR",56, 248, 5);
+
+
         
         /*ZOOM("FL", 12, 10);
         ZOOM("BL", 12, 10);
@@ -92,7 +96,6 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
 
 
         telemetry.addData("Auto","Complete");
-        telemetry.update();
     } //I want Zoom to be a turn while moving somewhere code, I think it may work, I don't really know though.
 
     // Set the target time rather than speed and compute velocity for each set of wheels in this function.
@@ -105,18 +108,25 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         double LSpeed = 0;
         double RSpeed = 0;
 
-        double radangle = (angle) *(PI/180);//conversion to radians
+        double radangle = (angle) *(PI/180);
         double theta = (PI/2) - (radangle);
         double x = (radangle + (PI/2))/2;
-       // double radius = (dist/(Math.sin(theta)))*(Math.sin(x));flipped theta and x
-        double radius = (dist)/(2*Math.cos(x));
+        double radius = (dist/(Math.sin(theta)))*(Math.sin(x));
+
+        double arcIN = (theta) * (radius - (Rwidth / 2.));
+        double arcOUT = (theta) * (radius + (Rwidth / 2.));
+
+        if (angle == 90) {
+             arcIN = (PI / 2) * ((dist / R2) - (Rwidth / 2.));
+             arcOUT = (PI / 2) * ((dist / R2) - (Rwidth / 2.));
+        }
 
 
 
-        double arcIN = ((radius)-Rwidth/2) * theta;
+
+
         double arcINspd =  arcIN/time ;
 
-        double arcOUT = (theta) * ( radius + (Rwidth / 2.));
         double arcOUTspd = arcOUT /time ;
 
 
