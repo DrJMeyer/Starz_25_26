@@ -81,7 +81,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
 DRIVE("F", 50, 7);
 STRAFE("R", 15, 3);
 STRAFE("L", 15, 5);
-ZOOM("FR",56, 90, 10);
+//ZOOM("FR",56, 90, 10);
 
 
 
