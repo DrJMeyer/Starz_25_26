@@ -208,7 +208,7 @@ PIVOT(TURN_SPEED, "R", 70);
     public void DRIVE( String direction, double dist, double time ) {
 
         int CTtarget = 0;
-        double speed = dist/time;
+
 
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
@@ -224,6 +224,8 @@ PIVOT(TURN_SPEED, "R", 70);
                 return;
             }
         }
+
+        double speed = CTtarget/time;
 
         MOVE(speed, speed, "DRIVE", direction, CTtarget, CTtarget, CTtarget, CTtarget);
 
