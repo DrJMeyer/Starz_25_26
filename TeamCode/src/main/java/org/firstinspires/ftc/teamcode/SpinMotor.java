@@ -39,10 +39,10 @@ public class SpinMotor extends LinearOpMode {
             telemetry.update();
 
             // Variable to fill with power of the motor.
-            double launchPower;
+            double launchPower = 0;
 
             // Set motor power using gamepad.
-            launchPower = -gamepad1.left_stick_y;
+            launchPower = gamepad1.left_stick_y;
 
             // Send power to motor
             launcher.setPower(launchPower);

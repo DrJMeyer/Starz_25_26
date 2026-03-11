@@ -19,7 +19,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
 
     static final double     PI  =   3.1415;
     static final double     R2  =   Math.sqrt(2.);
-    static final double     Rwidth = 12.75;
+    static final double     Rwidth = 12.25;
     static final double     COUNTS_PER_MOTOR_REV    =   112 * PI;
     static final double     DRIVE_GEAR_REDUCTION    =   1.0;
     static final double     WHEEL_DIAMETER_INCHES   =   3.38583;
@@ -76,9 +76,12 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         //// Fill with instructions here
        // DRIVE(DRIVE_SPEED, "F", 12);
         //DRIVE(DRIVE_SPEED, "B", 12);
-        ZOOM("FR",56, 45, 4);
-        ZOOM("FR",56, 90, 5);
-        ZOOM("FR",56, 248, 5);
+
+DRIVE(DRIVE_SPEED, "F", 50, 7);
+STRAFE(DRIVE_SPEED, "R", 25);
+PIVOT(TURN_SPEED, "R", 70);
+        ZOOM("FR",56, 90, 10);
+
 
 
         
@@ -202,9 +205,10 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         }
     }
 
-    public void DRIVE( double speed, String direction, double dist ) {
+    public void DRIVE( double speed, String direction, double dist, double time ) {
 
         int CTtarget = 0;
+        speed = speed/time;
 
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
