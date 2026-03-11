@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import java.lang.Math;
 
 @Autonomous(name="Encoder Functions", group="Robot")
 
@@ -78,9 +79,9 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         //DRIVE(DRIVE_SPEED, "B", 12);
 
 DRIVE("F", 50, 7);
-STRAFE(DRIVE_SPEED, "R", 25);
-PIVOT(TURN_SPEED, "R", 70);
-        ZOOM("FR",56, 90, 10);
+STRAFE("R", 15, 3);
+STRAFE("L", 15, 5);
+ZOOM("FR",56, 90, 10);
 
 
 
@@ -231,7 +232,7 @@ PIVOT(TURN_SPEED, "R", 70);
 
     }
 
-    public void STRAFE( double speed, String direction, double dist ) {
+    public void STRAFE( String direction, double dist, double time ) {
 
         int FStarget = 0;//Front slash, forward slash goes upper right
         int BStarget = 0;//back slash, leans back, goes upper left
@@ -254,7 +255,9 @@ PIVOT(TURN_SPEED, "R", 70);
             }
         }
 
-        MOVE(speed, "STRAFE", direction, FStarget, BStarget, BStarget, FStarget);
+        double speed = Math.abs(FStarget / time);
+
+        MOVE(speed, speed, "STRAFE", direction, FStarget, BStarget, BStarget, FStarget);
 
     }
     public void PIVOT( double speed, String direction, double angle ) {
