@@ -205,10 +205,10 @@ PIVOT(TURN_SPEED, "R", 70);
         }
     }
 
-    public void DRIVE( double speed, String direction, double dist, double time ) {
+    public void DRIVE( String direction, double dist, double time ) {
 
         int CTtarget = 0;
-        speed = speed/time;
+        double speed = dist/time;
 
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
@@ -252,7 +252,7 @@ PIVOT(TURN_SPEED, "R", 70);
             }
         }
 
-        MOVE(speed, speed, "STRAFE", direction, FStarget, BStarget, BStarget, FStarget);
+        MOVE(speed, "STRAFE", direction, FStarget, BStarget, BStarget, FStarget);
 
     }
     public void PIVOT( double speed, String direction, double angle ) {
@@ -278,7 +278,7 @@ PIVOT(TURN_SPEED, "R", 70);
             }
         }
 
-        MOVE(speed, speed,"PIVOT", direction, Ptarget, Starget, Ptarget, Starget);
+        MOVE(speed,"PIVOT", direction, Ptarget, Starget, Ptarget, Starget);
 
     }
 
