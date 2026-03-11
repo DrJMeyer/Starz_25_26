@@ -77,7 +77,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
        // DRIVE(DRIVE_SPEED, "F", 12);
         //DRIVE(DRIVE_SPEED, "B", 12);
 
-DRIVE(DRIVE_SPEED, "F", 50, 7);
+DRIVE("F", 50, 7);
 STRAFE(DRIVE_SPEED, "R", 25);
 PIVOT(TURN_SPEED, "R", 70);
         ZOOM("FR",56, 90, 10);
