@@ -14,6 +14,7 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
     private DcMotorEx FSD = null;
     private DcMotorEx BPD = null;
     private DcMotorEx BSD = null;
+    //fix radus code
 
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -78,12 +79,10 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
        // DRIVE(DRIVE_SPEED, "F", 12);
         //DRIVE(DRIVE_SPEED, "B", 12);
 
-DRIVE("F", 50, 7);
-STRAFE("R", 15, 3);
-STRAFE("L", 15, 5);
-//ZOOM("FR",56, 90, 10);
-
-        // Will, this is correct update
+DRIVE("F", 50, 3);
+STRAFE("R", 30, 1);
+STRAFE("L", 25, 1);
+ZOOM("FR",56, 90, 3);
 
 
 
@@ -124,7 +123,7 @@ STRAFE("L", 15, 5);
 
         if (angle == 90) {
              arcIN = (PI / 2) * ((dist / R2) - (Rwidth / 2.));
-             arcOUT = (PI / 2) * ((dist / R2) - (Rwidth / 2.));
+             arcOUT = (PI / 2) * ((dist / R2) + (Rwidth / 2.));
         }
 
 
