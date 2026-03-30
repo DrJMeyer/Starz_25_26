@@ -39,12 +39,16 @@ initAprilTag();
          visionPortal.stopStreaming();
     } else if (gamepad1.dpad_up) {
         visionPortal.resumeStreaming();
+        telemetry.update();
+
         }
         sleep(20);
     }
 }
 
 visionPortal.close();
+telemetry.update();
+
 
 }
 private void initAprilTag() {
@@ -52,7 +56,7 @@ aprilTag = AprilTagProcessor.easyCreateWithDefaults();
 
 if (USE_WEBCAM) {
     visionPortal = VisionPortal.easyCreateWithDefaults(
-            hardwareMap.get(WebcamName.class, "meowEye"), aprilTag);
+            hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTag);
 
 } else {
     visionPortal = VisionPortal.easyCreateWithDefaults(
@@ -78,6 +82,7 @@ for (AprilTagDetection detection : currentDetections) {
 telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
 telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
 telemetry.addLine("RBE = Range, Bearing & Elevation");
+telemetry.update();
 
 
 }

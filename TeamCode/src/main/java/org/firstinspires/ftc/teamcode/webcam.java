@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -24,23 +25,54 @@ public class webcam extends LinearOpMode {
     private VisionPortal visionPortal;
 
     // 🔧 Motors
-    DcMotor frontLeftMotor;
-    DcMotor frontRightMotor;
-    DcMotor backLeftMotor;
-    DcMotor backRightMotor;
+    private DcMotorEx FPD = null;
+    private DcMotorEx FSD = null;
+    private DcMotorEx BPD = null;
+    private DcMotorEx BSD = null;
+
+    private double target_x;
+    private double target_y;
+    private double target_rot;
+
+    private double current_x;
+    private double current_y;
+    private double current_rot;
+
+
+
+
+
 
     @Override
     public void runOpMode() {
 
         // 🔧 Initialize motors (MAKE SURE NAMES MATCH CONFIG)
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
-        frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
-        backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
-        backRightMotor = hardwareMap.get(DcMotor.class, "br");
+        FPD = hardwareMap.get(DcMotorEx.class, "fpd");
+        FSD = hardwareMap.get(DcMotorEx.class, "fsd");
+        BPD = hardwareMap.get(DcMotorEx.class, "bpd");
+        BSD = hardwareMap.get(DcMotorEx.class, "bsd");
 
-        // Reverse one side if needed
-        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        // Set wheel direction
+        FPD.setDirection(DcMotor.Direction.REVERSE);
+        BPD.setDirection(DcMotor.Direction.REVERSE);
+
+        FSD.setDirection(DcMotor.Direction.FORWARD);
+        BSD.setDirection(DcMotor.Direction.FORWARD);
+
+        FPD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FSD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BSD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BPD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        FPD.setTargetPosition(0);
+        FSD.setTargetPosition(0);
+        BPD.setTargetPosition(0);
+        BSD.setTargetPosition(0);
+
+        FPD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FSD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BPD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BSD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         initAprilTag();
 
@@ -65,11 +97,19 @@ public class webcam extends LinearOpMode {
                 }
 
                 // 🎯 AUTO ALIGN WHEN HOLDING A BUTTON
-                if (tag != null && gamepad1.a) {
+                if (tag != null) {
 
-                    double errorX = tag.ftcPose.x;          // left/right
-                    double errorY = tag.ftcPose.y - 10;     // target distance = 10 inches
-                    double errorYaw = tag.ftcPose.yaw;      // rotation
+                    current_x = tag.ftcPose.x;
+                    current_y = tag.ftcPose.y;
+                    current_rot = tag.ftcPose.yaw;
+
+
+
+
+
+                    double errorX = target_x - current_x;          // left/right
+                    double errorY = target_y - current_y;    // target distance = 10 inches
+                    double errorYaw = target_rot - current_rot;   // rotation
 
                     // ⚙️ tuning values (adjust these!)
                     double kStrafe = 0.02;
@@ -94,7 +134,7 @@ public class webcam extends LinearOpMode {
 
                 } else {
                     // stop if no tag or button not pressed
-                    driveRobot(0, 0, 0);
+                    driveRobot(0, 0, 1);
                 }
 
                 telemetryAprilTag();
@@ -119,7 +159,7 @@ public class webcam extends LinearOpMode {
 
         if (USE_WEBCAM) {
             visionPortal = VisionPortal.easyCreateWithDefaults(
-                    hardwareMap.get(WebcamName.class, "meowEye"), aprilTag);
+                    hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTag);
         } else {
             visionPortal = VisionPortal.easyCreateWithDefaults(
                     BuiltinCameraDirection.BACK, aprilTag);
@@ -134,10 +174,10 @@ public class webcam extends LinearOpMode {
         double backLeft   = forward - strafe + turn;
         double backRight  = forward + strafe - turn;
 
-        frontLeftMotor.setPower(frontLeft);
-        frontRightMotor.setPower(frontRight);
-        backLeftMotor.setPower(backLeft);
-        backRightMotor.setPower(backRight);
+        FPD.setPower(frontLeft);
+        FSD.setPower(frontRight);
+        BPD.setPower(backLeft);
+        BSD.setPower(backRight);
     }
 
     @SuppressLint("DefaultLocale")
