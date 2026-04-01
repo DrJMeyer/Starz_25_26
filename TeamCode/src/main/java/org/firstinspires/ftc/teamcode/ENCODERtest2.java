@@ -83,7 +83,7 @@ public class ENCODERtest2 extends LinearOpMode {
         waitForStart();
         encoderDrive(DRIVE_SPEED,  52,  52, 52, 52, 10.0); // Forward
         encoderDrive(TURN_SPEED, 19.5, -19.5, 19.5, -19.5, 50.0); // Turn
-       // Intake.setPower(1);
+        // Intake.setPower(1);
         //lIntake.setPower(1);
         encoderDrive(DRIVE_SPEED,  30,  30, 30, 30, 100.0); // Strafe
         encoderDrive(DRIVE_SPEED,  -35,  -35, -35, -35, 10.0); // Forward
@@ -157,10 +157,10 @@ public class ENCODERtest2 extends LinearOpMode {
                     (robotfpd.isBusy() && robotfsd.isBusy() && robotbpd.isBusy() && robotbsd.isBusy())) {
 
                 // Display it for the driver.
-             //   telemetry.addData("Running to",  " %7d :%7d", newfpdTarget,  newfsdTarget, newbpdTarget, newbsdTarget);
-             //   telemetry.addData("Currently at",  " at %7d :%7d",
-             //           robotfpd.getCurrentPosition(), robotfsd.getCurrentPosition(), robotbpd.getCurrentPosition(), robotbsd.getCurrentPosition());
-             //   telemetry.update();
+                //   telemetry.addData("Running to",  " %7d :%7d", newfpdTarget,  newfsdTarget, newbpdTarget, newbsdTarget);
+                //   telemetry.addData("Currently at",  " at %7d :%7d",
+                //           robotfpd.getCurrentPosition(), robotfsd.getCurrentPosition(), robotbpd.getCurrentPosition(), robotbsd.getCurrentPosition());
+                //   telemetry.update();
             }
 
             telemetry.addData("Arrived at ", "%7d", robotfpd.getCurrentPosition() );
@@ -172,10 +172,10 @@ public class ENCODERtest2 extends LinearOpMode {
             robotbpd.setPower(0);
             robotbsd.setPower(0);
             // Turn off RUN_TO_POSITION
-          //  robotfpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-          //  robotfsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-          //  robotbpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-          //  robotbsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //  robotfpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //  robotfsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //  robotbpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //  robotbsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             //sleep(250);   // optional pause after each move.
         }

@@ -14,6 +14,8 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
     private DcMotorEx FSD = null;
     private DcMotorEx BPD = null;
     private DcMotorEx BSD = null;
+    //fix radus code
+
 
     private ElapsedTime runtime = new ElapsedTime();
 

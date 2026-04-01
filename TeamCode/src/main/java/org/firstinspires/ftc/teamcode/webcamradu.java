@@ -17,7 +17,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 @TeleOp(name = "newsight", group = "Practice")
-public class webcam extends LinearOpMode {
+public class webcamradu extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;
 
@@ -88,13 +88,14 @@ public class webcam extends LinearOpMode {
                 // 🎯 AUTO ALIGN WHEN HOLDING A BUTTON
                 if (tag != null) {
 
-                   target_x = 0;
-                   target_y = 10;
+                    target_x = 0;
+                    target_y = 10;
 
 
                     current_x = tag.ftcPose.x;
                     current_y = tag.ftcPose.y;
                     current_rot = tag.ftcPose.yaw;
+                    target_rot = 0;//set a value pleaseeeee
 
 
 
@@ -103,32 +104,45 @@ public class webcam extends LinearOpMode {
                     double errorX = target_x - current_x;          // left/right
                     double errorY = target_y - current_y;    // target distance = 10 inches
                     double errorYaw = target_rot - current_rot;   // rotation
+                    double xTol = 0.75;     // inches
+                    double yTol = 0.75;     // inches
+                    double yawTol = 2.0;    // degrees
+                    boolean aligned =
+                            Math.abs(errorX) < xTol &&
+                                    Math.abs(errorY) < yTol &&
+                                    Math.abs(errorYaw) < yawTol;
+                    if (aligned){
+                        driveRobot(0,0,0);
+                    }
 
                     // ⚙️ tuning values (adjust these!)
-                    double kStrafe = 0.02;
+
+                    /*double kStrafe = 0.02;
                     double kForward = 0.02;
-                    double kTurn = 0.01;
+                    double kTurn = 0.006;
 
                     double strafe = errorX * kStrafe;
                     double forward = errorY * kForward;
                     double turn = errorYaw * kTurn;
+                    turn = Range.clip(turn, -0.18, 0.18);//puts a hard limit around the values
+                    if (Math.abs(errorYaw) < 1.0) turn = 0;//reduces jitteriness
 
                     // 🧠 dead zones (prevents shaking)
-                  //  if (Math.abs(errorX) < 1) strafe = 0;
-                 //   if (Math.abs(errorY) < 1) forward = 0;
-                  //  if (Math.abs(errorYaw) < 2) turn = 0;
+                    //  if (Math.abs(errorX) < 1) strafe = 0;
+                    //   if (Math.abs(errorY) < 1) forward = 0;
+                    //  if (Math.abs(errorYaw) < 2) turn = 0;
 
                     // 🔒 clamp speeds
-               //     strafe = Range.clip(strafe, -0.5, 0.5);
-            //        forward = Range.clip(forward, -0.5, 0.5);
-              //      turn = Range.clip(turn, -0.4, 0.4);
+                    //     strafe = Range.clip(strafe, -0.5, 0.5);
+                    //        forward = Range.clip(forward, -0.5, 0.5);
+                    //      turn = Range.clip(turn, -0.4, 0.4);
 
                     driveRobot(forward, strafe, turn);
 
                 } else {
-                    // stop if no tag or button not pressed
-                    driveRobot(0, 0, .15);
-                }
+                    // stop if no tag
+                    driveRobot(0, 0, .08);
+                }*/
 
                 telemetryAprilTag();
                 telemetry.update();
@@ -164,9 +178,13 @@ public class webcam extends LinearOpMode {
     public void driveRobot(double forward, double strafe, double turn) {
 
         double frontLeft  = forward + strafe + turn;
+        frontLeft=Range.clip(frontLeft, 1.0, -1.0);//clips these values
         double frontRight = forward - strafe - turn;
+        frontRight=Range.clip(frontRight, 1.0, -1.0);//clips these values
         double backLeft   = forward - strafe + turn;
+        backLeft=Range.clip(backLeft,1.0,-1.0);
         double backRight  = forward + strafe - turn;
+        backRight=Range.clip(backRight,1.0,-1.0);
 
         FPD.setPower(frontLeft);
         FSD.setPower(frontRight);
