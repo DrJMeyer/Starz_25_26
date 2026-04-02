@@ -140,9 +140,12 @@ public class webcamradu extends LinearOpMode {
                     driveRobot(forward, strafe, turn);
 
                 } else {
-                    // stop if no tag
+                    // stop if no tag(this needs to be after we pick up the balls or lose the tag when heading to the correct goal
                     driveRobot(0, 0, .08);
                 }*/
+// we need it to be able to first pull the id, go to the correct lines of balls and pick up, then turn and find the CORRECT april tag
+                    //by ignoring the other goal's tag
+                    // if tag!=null then turn to find april tag to position itself(again once it already has balls) if it has found it but lost it while pathing and meets its end.
 
                 telemetryAprilTag();
                 telemetry.update();
