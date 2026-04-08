@@ -59,7 +59,20 @@ public class webcam extends LinearOpMode {
         FSD.setDirection(DcMotor.Direction.FORWARD);
         BSD.setDirection(DcMotor.Direction.FORWARD);
 
+        FPD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FSD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BSD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BPD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        FPD.setTargetPosition(0);
+        FSD.setTargetPosition(0);
+        BPD.setTargetPosition(0);
+        BSD.setTargetPosition(0);
+
+        FPD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FSD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BPD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BSD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         initAprilTag();
 
@@ -71,8 +84,6 @@ public class webcam extends LinearOpMode {
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-
-                telemetry.addLine("WORKING");
 
                 // 🔍 Get detections
                 AprilTagDetection tag = null;
@@ -87,10 +98,6 @@ public class webcam extends LinearOpMode {
 
                 // 🎯 AUTO ALIGN WHEN HOLDING A BUTTON
                 if (tag != null) {
-
-                   target_x = 0;
-                   target_y = 10;
-
 
                     current_x = tag.ftcPose.x;
                     current_y = tag.ftcPose.y;
@@ -109,25 +116,25 @@ public class webcam extends LinearOpMode {
                     double kForward = 0.02;
                     double kTurn = 0.01;
 
-                    double strafe = errorX * kStrafe;
-                    double forward = errorY * kForward;
-                    double turn = errorYaw * kTurn;
+                    double strafe = -errorX * kStrafe;
+                    double forward = -errorY * kForward;
+                    double turn = -errorYaw * kTurn;
 
                     // 🧠 dead zones (prevents shaking)
-                  //  if (Math.abs(errorX) < 1) strafe = 0;
-                 //   if (Math.abs(errorY) < 1) forward = 0;
-                  //  if (Math.abs(errorYaw) < 2) turn = 0;
+                    if (Math.abs(errorX) < 1) strafe = 0;
+                    if (Math.abs(errorY) < 1) forward = 0;
+                    if (Math.abs(errorYaw) < 2) turn = 0;
 
                     // 🔒 clamp speeds
-               //     strafe = Range.clip(strafe, -0.5, 0.5);
-            //        forward = Range.clip(forward, -0.5, 0.5);
-              //      turn = Range.clip(turn, -0.4, 0.4);
+                    strafe = Range.clip(strafe, -0.5, 0.5);
+                    forward = Range.clip(forward, -0.5, 0.5);
+                    turn = Range.clip(turn, -0.4, 0.4);
 
                     driveRobot(forward, strafe, turn);
 
                 } else {
                     // stop if no tag or button not pressed
-                    driveRobot(0, 0, .15);
+                    driveRobot(0, 0, 1);
                 }
 
                 telemetryAprilTag();
@@ -145,7 +152,6 @@ public class webcam extends LinearOpMode {
         }
 
         visionPortal.close();
-        telemetry.update();
     }
 
     private void initAprilTag() {
