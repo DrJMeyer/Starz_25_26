@@ -47,10 +47,10 @@ public class webcamradu extends LinearOpMode {
     public void runOpMode() {
 
         // 🔧 Initialize motors (MAKE SURE NAMES MATCH CONFIG)
-        FPD = hardwareMap.get(DcMotorEx.class, "fpd");
-        FSD = hardwareMap.get(DcMotorEx.class, "fsd");
-        BPD = hardwareMap.get(DcMotorEx.class, "bpd");
-        BSD = hardwareMap.get(DcMotorEx.class, "bsd");
+      //  FPD = hardwareMap.get(DcMotorEx.class, "fpd");
+       // FSD = hardwareMap.get(DcMotorEx.class, "fsd");
+       // BPD = hardwareMap.get(DcMotorEx.class, "bpd");
+       // BSD = hardwareMap.get(DcMotorEx.class, "bsd");
 
         // Set wheel direction
         FPD.setDirection(DcMotor.Direction.REVERSE);
