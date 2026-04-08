@@ -52,7 +52,7 @@ public class activation extends LinearOpMode {
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
 
-    private int[] motif;
+    private int [] motif;
     public int IDnum;
     public double intakePos;
     public int num;

@@ -97,7 +97,7 @@ public class webcam extends LinearOpMode {
                 }
 
                 // 🎯 AUTO ALIGN WHEN HOLDING A BUTTON
-                if (tag != null) {
+                if (tag != null ) {
 
                     current_x = tag.ftcPose.x;
                     current_y = tag.ftcPose.y;

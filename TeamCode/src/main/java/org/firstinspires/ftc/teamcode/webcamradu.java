@@ -85,6 +85,7 @@ public class webcamradu extends LinearOpMode {
                     }
                 }
 
+
                 // 🎯 AUTO ALIGN WHEN HOLDING A BUTTON
                 if (tag != null) {
 
@@ -165,6 +166,9 @@ public class webcamradu extends LinearOpMode {
                     // if tag!=null then turn to find april tag to position itself(again once it already has balls) if it has found it but lost it while pathing and meets its end.
 
                     telemetryAprilTag();
+                    telemetry.update();
+
+                    telemetry.addData("ID", tag);
                     telemetry.update();
 
                     // camera controls
