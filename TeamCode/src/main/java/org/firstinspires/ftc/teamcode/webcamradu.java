@@ -98,9 +98,6 @@ public class webcamradu extends LinearOpMode {
                     target_rot = 0;//set a value pleaseeeee
 
 
-
-
-
                     double errorX = target_x - current_x;          // left/right
                     double errorY = target_y - current_y;    // target distance = 10 inches
                     double errorYaw = target_rot - current_rot;   // rotation
@@ -111,11 +108,31 @@ public class webcamradu extends LinearOpMode {
                             Math.abs(errorX) < xTol &&
                                     Math.abs(errorY) < yTol &&
                                     Math.abs(errorYaw) < yawTol;
-                    if (aligned){
-                        driveRobot(0,0,0);
+                    if (aligned) {
+                        driveRobot(0, 0, 0);
+                        telemetry.addLine("Align Complete!");
+                    }
+                    else {
+                        // normal controller
+                        double kStrafe = 0.02;
+                        double kForward = 0.02;
+                        double kTurn = 0.006;
+                        double strafe = errorX * kStrafe;
+                        double forward = errorY * kForward;
+                        double turn = errorYaw * kTurn;
+                        // deadbands
+                        if (Math.abs(errorX) < 0.5) strafe = 0;
+                        if (Math.abs(errorY) < 0.5) forward = 0;
+                        if (Math.abs(errorYaw) < 1.0) turn = 0;
+                        // clips
+                        strafe = Range.clip(strafe, -0.4, 0.4);
+                        forward = Range.clip(forward, -0.4, 0.4);
+                        turn = Range.clip(turn, -0.18, 0.18);
+                        driveRobot(forward, strafe, turn);
+
                     }
 
-                    // ⚙️ tuning values (adjust these!)
+                    // ⚙️ tuning values (adjust these!) ALLLLLL THIS CODE IS BUNNNNNNNSSSSSS
 
                     /*double kStrafe = 0.02;
                     double kForward = 0.02;
@@ -147,22 +164,23 @@ public class webcamradu extends LinearOpMode {
                     //by ignoring the other goal's tag
                     // if tag!=null then turn to find april tag to position itself(again once it already has balls) if it has found it but lost it while pathing and meets its end.
 
-                telemetryAprilTag();
-                telemetry.update();
+                    telemetryAprilTag();
+                    telemetry.update();
 
-                // camera controls
-                if (gamepad1.dpad_down) {
-                    visionPortal.stopStreaming();
-                } else if (gamepad1.dpad_up) {
-                    visionPortal.resumeStreaming();
+                    // camera controls
+                    if (gamepad1.dpad_down) {
+                        visionPortal.stopStreaming();
+                    } else if (gamepad1.dpad_up) {
+                        visionPortal.resumeStreaming();
+                    }
+
+                    sleep(20);
                 }
-
-                sleep(20);
             }
-        }
 
-        visionPortal.close();
-        telemetry.update();
+            visionPortal.close();
+            telemetry.update();
+        }
     }
 
     private void initAprilTag() {
