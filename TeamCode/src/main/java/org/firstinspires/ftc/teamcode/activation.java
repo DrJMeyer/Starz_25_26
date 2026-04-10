@@ -171,6 +171,7 @@ public class activation extends LinearOpMode {
            // yCurrent = gamepad1.y;
             lbCurrent = gamepad1.left_bumper;
             rbCurrent = gamepad1.right_bumper;
+            
 
           // if (aCurrent != aPrev || bCurrent != bPrev || lbCurrent != lbPrev  || gamepad1.x || rbCurrent != rbPrev) {
            intakecode();

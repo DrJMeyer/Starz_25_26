@@ -66,10 +66,10 @@ public class EncoderAuto_LinearFunctions extends LinearOpMode {
         BSD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Set motors to move using encoders
-//        FSD.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        FPD.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        BPD.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        BSD.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FSD.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FPD.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BPD.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BSD.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         // Hold until start is pressed
